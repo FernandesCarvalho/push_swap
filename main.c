@@ -1,52 +1,72 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/11/18 17:57:47 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/19 13:11:56 by fercarva         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "push_swap.h"
 
-int main(void)
+void	print_stack(char *name, t_stack *stack)
 {
-	t_stack a;
-    t_node node1;
-	t_node node2;
-	t_node node3;
-	t_node *current;
+	t_node	*current;
 
-	a.head = NULL;
-	a.tail = NULL;
-	a.size = 0;
-	
-
-	node1.value = 42;
-	node2.value = 21;
-	node3.value = 10;
-
-	//Sem nós
-	printf("Teste sem nós:\n");
-	swap();
-
-	
-	add_node_back(&a, &node1);
-	
-	current = a.head;
-	add_node_back(&a, &node2);
-	add_node_back(&a, &node3);
-	
-	current = a.head;
-	printf("Teste com 3 nós:\n");
+	printf("%s (size: %d): ", name, stack->size);
+	current = stack->head;
 	while (current)
 	{
-		printf("Valor do nó: %i\n", current->value);
+		printf("%d ", current->value);
 		current = current->next;
 	}
+	printf("\n");
+}
 
-    return (0);
+void	print_stacks(t_stack *a, t_stack *b)
+{
+	print_stack("A", a);
+	print_stack("B", b);
+	printf("\n");
+}
+
+int	main(void)
+{
+	t_stack	a = {0};
+	t_stack	b = {0};
+	t_node	a1 = {.value = 42};
+	t_node	a2 = {.value = 21};
+	t_node	a3 = {.value = 10};
+	t_node	b1 = {.value = 8};
+	t_node	b2 = {.value = 5};
+
+	add_node_back(&a, &a1);
+	add_node_back(&a, &a2);
+	add_node_back(&a, &a3);
+	add_node_back(&b, &b1);
+	add_node_back(&b, &b2);
+
+	printf("=== ESTADO INICIAL ===\n");
+	print_stacks(&a, &b);
+
+	printf("=== TESTE PB ===\n");
+	pb(&a, &b);
+	print_stacks(&a, &b);
+
+	printf("=== TESTE PA ===\n");
+	pa(&a, &b);
+	print_stacks(&a, &b);
+
+	printf("=== ESVAZIAR A COM PB ===\n");
+	pb(&a, &b);
+	pb(&a, &b);
+	pb(&a, &b);
+	print_stacks(&a, &b);
+
+	printf("=== PB COM A VAZIA ===\n");
+	pb(&a, &b);
+	print_stacks(&a, &b);
+
+	printf("=== ESVAZIAR B COM PA ===\n");
+	while (b.head)
+		pa(&a, &b);
+	print_stacks(&a, &b);
+
+	printf("=== PA COM B VAZIA ===\n");
+	pa(&a, &b);
+	print_stacks(&a, &b);
+
+	return (0);
 }
