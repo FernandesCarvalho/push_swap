@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 00:33:27 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/21 11:47:32 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define PUSH_SWAP_H
 
 # include <unistd.h>
+# include <stdlib.h>
+# include <limits.h>
 # include <stdio.h>
 
 typedef struct s_node
@@ -31,7 +33,7 @@ typedef struct s_stack
 	int		size;
 } t_stack;
 
-//                             ****     OPERATIONS     *****
+//                             ****     OPERATIONS     ****
 
 //                    #SWAP
 
@@ -53,7 +55,19 @@ void	ra(t_stack *a);
 void	rb(t_stack *b);
 void	rr(t_stack *a, t_stack *b);
 
-//                             ****     STACK     *****
+//                    #REVERSE ROTATE
+
+void	reverse_rotate(t_stack *stack);
+void	rra(t_stack *a);
+void	rrb(t_stack *b);
+void	rrr(t_stack *a, t_stack *b);
+
+//                             ****     PARSING     ****
+
+int	validate_number(char *str);
+
+
+//                             ****     STACK     ****
 
 void	add_node_back(t_stack *stack, t_node *new_node);
 

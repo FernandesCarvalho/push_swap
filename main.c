@@ -1,8 +1,20 @@
 
 #include "push_swap.h"
-#include <stdio.h>
 
-void	print_stack(char *name, t_stack *stack)
+int	main(int ac, char **av)
+{
+	int	i;
+
+	i = 1;
+	while (i < ac)
+	{
+		printf("argv[%i] = %s\n", i, av[i]);
+		i++;
+	}
+	return (0);
+}
+
+/* void	print_stack(char *name, t_stack *stack)
 {
 	t_node	*current;
 
@@ -42,34 +54,34 @@ int	main(void)
 	printf("=== ESTADO INICIAL ===\n");
 	print_stacks(&a, &b);
 
-	printf("=== TESTE RA ===\n");
-	ra(&a);
+	printf("=== TESTE RRA ===\n");
+	rra(&a);
 	print_stacks(&a, &b);
 
-	printf("=== TESTE RB ===\n");
-	rb(&b);
+	printf("=== TESTE RRB ===\n");
+	rrb(&b);
 	print_stacks(&a, &b);
 
-	printf("=== TESTE RR ===\n");
-	rr(&a, &b);
+	printf("=== TESTE RRR ===\n");
+	rrr(&a, &b);
 	print_stacks(&a, &b);
 
-	printf("=== RR NOVAMENTE ===\n");
-	rr(&a, &b);
+	printf("=== RRR NOVAMENTE ===\n");
+	rrr(&a, &b);
 	print_stacks(&a, &b);
 
 	printf("=== TESTE COM A VAZIA ===\n");
 	while (a.head)
 		pb(&a, &b);
-	ra(&a);
-	rr(&a, &b);
+	rra(&a);
+	rrr(&a, &b);
 	print_stacks(&a, &b);
 
 	printf("=== TESTE COM UM NO ===\n");
 	while (b.size > 1)
 		pa(&a, &b);
-	rb(&b);
+	rrb(&b);
 	print_stacks(&a, &b);
 
 	return (0);
-}
+} */
