@@ -1,5 +1,6 @@
 
 #include "push_swap.h"
+#include <stdio.h>
 
 void	print_stack(char *name, t_stack *stack)
 {
@@ -41,31 +42,33 @@ int	main(void)
 	printf("=== ESTADO INICIAL ===\n");
 	print_stacks(&a, &b);
 
-	printf("=== TESTE PB ===\n");
-	pb(&a, &b);
+	printf("=== TESTE RA ===\n");
+	ra(&a);
 	print_stacks(&a, &b);
 
-	printf("=== TESTE PA ===\n");
-	pa(&a, &b);
+	printf("=== TESTE RB ===\n");
+	rb(&b);
 	print_stacks(&a, &b);
 
-	printf("=== ESVAZIAR A COM PB ===\n");
-	pb(&a, &b);
-	pb(&a, &b);
-	pb(&a, &b);
+	printf("=== TESTE RR ===\n");
+	rr(&a, &b);
 	print_stacks(&a, &b);
 
-	printf("=== PB COM A VAZIA ===\n");
-	pb(&a, &b);
+	printf("=== RR NOVAMENTE ===\n");
+	rr(&a, &b);
 	print_stacks(&a, &b);
 
-	printf("=== ESVAZIAR B COM PA ===\n");
-	while (b.head)
+	printf("=== TESTE COM A VAZIA ===\n");
+	while (a.head)
+		pb(&a, &b);
+	ra(&a);
+	rr(&a, &b);
+	print_stacks(&a, &b);
+
+	printf("=== TESTE COM UM NO ===\n");
+	while (b.size > 1)
 		pa(&a, &b);
-	print_stacks(&a, &b);
-
-	printf("=== PA COM B VAZIA ===\n");
-	pa(&a, &b);
+	rb(&b);
 	print_stacks(&a, &b);
 
 	return (0);
