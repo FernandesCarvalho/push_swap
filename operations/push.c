@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:00:13 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 10:30:23 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/21 20:49:43 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	push(t_stack *dst, t_stack *src)
 {
 	t_node	*temp;
 
-	if (!src->head)
+	if (!dst || !src || !src->head)
 		return ;
 	temp = src->head;
 	src->head = temp->next;
@@ -47,6 +47,7 @@ void	pa(t_stack *a, t_stack *b)
 	push(a, b);
 	write(1, "pa\n", 3);
 }
+
 void	pb(t_stack *a, t_stack *b)
 {
 	if (!a->head)

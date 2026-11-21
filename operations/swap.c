@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:32:06 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 19:28:28 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/21 20:11:11 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,13 @@ void	swap(t_stack *stack)
 	second->next = first;
 	first->next = temp;
 	first->prev = second;
-	stack->head = second;	
+	stack->head = second;
 	if (temp)
 		temp->prev = first;
 	else
 		stack->tail = first;
 }
+
 void	sa(t_stack *a)
 {
 	if (!a || a->size < 2)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reverse_rotate.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:00:44 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 10:46:45 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/21 20:51:24 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	reverse_rotate(t_stack *stack)
 {
 	t_node	*temp;
 
-	if (!stack->head || !stack->head->next)
+	if (!stack || !stack->head || !stack->head->next)
 		return ;
 	temp = stack->tail;
 	stack->tail = temp->prev;

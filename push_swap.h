@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 19:35:23 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/21 20:48:17 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <stdio.h>
-# include "./libft/libft.h"
+# include "libft.h"
 
 typedef struct s_node
 {
@@ -64,11 +64,16 @@ void	rrr(t_stack *a, t_stack *b);
 
 //                             ****     PARSING     ****
 
-int	validate_number(char *str);
-int	convert_numbers(char *str, int *result);
+int		validate_number(char *str);
+int		has_duplicate(t_stack *a, int value);
+int		convert_numbers(char *str, int *result);
+int		error_exit(t_stack *a, t_stack *b, char **split);
+void	free_split(char **split);
 
 //                             ****     STACK     ****
 
 void	add_node_back(t_stack *stack, t_node *new_node);
+t_node	*new_node(int value);
+void	free_stack(t_stack *stack);
 
 #endif
