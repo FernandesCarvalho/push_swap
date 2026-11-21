@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_number.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/21 11:11:02 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 11:19:47 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/21 19:43:01 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,16 @@ int	validate_number(char *str)
 {
 	int	i;
 
+	if(!str || !str[0])
+		return (0);
 	i = 0;
 	if (str[i] == '-' || str[i] == '+')
 			i++;
-	if (str[i] == '\0')
+	if (!str[i])
 		return (0);
 	while (str[i])
 	{
-		if (!ft_isdigit(str[i]))
+		if (!ft_isdigit((unsigned char)str[i]))
 			return (0);
 		i++;
 	}

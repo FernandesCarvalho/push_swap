@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 11:47:32 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/21 19:35:23 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <stdio.h>
+# include "./libft/libft.h"
 
 typedef struct s_node
 {
 	int	value;
 	struct s_node	*prev;
 	struct s_node	*next;
-
 } t_node;
 
 typedef struct s_stack
@@ -65,7 +65,7 @@ void	rrr(t_stack *a, t_stack *b);
 //                             ****     PARSING     ****
 
 int	validate_number(char *str);
-
+int	convert_numbers(char *str, int *result);
 
 //                             ****     STACK     ****
 

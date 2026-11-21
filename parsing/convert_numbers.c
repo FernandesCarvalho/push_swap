@@ -3,20 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   convert_numbers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/21 11:30:11 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 11:58:23 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/21 19:42:25 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
+static int	check_overflow(long res, int sign, int digit)
+{
+	if (sign == 1 && res > (INT_MAX - digit) / 10)
+		return (1);
+	if (sign == -1 && -res < (INT_MIN + digit) / 10)
+		return (1);
+	return (0);
+}
 
 int	convert_numbers(char *str, int *result)
 {
 	long	res;
 	int		sign;
+	int		digit;
 
+	if (!str || !result)
+		return (0);
 	res = 0;
 	sign = 1;
 	if (*str == '-' || *str == '+')
@@ -25,14 +36,16 @@ int	convert_numbers(char *str, int *result)
 			sign = -sign;
 		str++;
 	}
-	while (*str && (*str >= '0' && *str <= '9'))
-	{
-		res = (res * 10) + (*str - '0');
-		if ((res * sign) > INT_MAX|| (res * sign) < INT_MIN)
+	while (!*str)
+	{	
+		if (!ft_isdigit((unsigned char)*str))
 			return (0);
+		digit = *str - '0';
+		if (check_overflow(res, sign, digit))
+			return (0);
+		res = (res * 10) + digit;
 		str++;
 	}
-	res = (res *sign);
-	*result = res;
+	*result = (int)(res *sign);
 	return (1);
 }
