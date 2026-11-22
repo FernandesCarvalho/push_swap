@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/22 20:42:35 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/22 20:49:08 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int		has_duplicate(t_stack *a, int value);
 int		convert_numbers(char *str, int *result);
 int		error_exit(t_stack *a, t_stack *b, char **split);
 void	free_split(char **split);
+int	parse_args(int argc, char **argv, t_stack *a, t_stack *b);
 
 //                             ****     STACK     ****
 
