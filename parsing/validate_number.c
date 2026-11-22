@@ -6,12 +6,12 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/21 11:11:02 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 20:46:06 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/22 19:06:23 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
-
+//VERIFICAR SE PRECISA DESSA FUNCAO - CONVERT_NUMBERS JA FAZ ISSO
 int	validate_number(char *str)
 {
 	int	i;

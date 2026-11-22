@@ -6,7 +6,7 @@
 #    By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/21 17:33:56 by jeanbarr          #+#    #+#              #
-#    Updated: 2026/11/21 21:02:35 by jeanbarr         ###   ########.fr        #
+#    Updated: 2026/11/22 20:44:39 by jeanbarr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,12 +26,14 @@ SRCS	= main_jeanlezy.c \
 			stack/new_node.c \
 			parsing/validate_number.c \
 			parsing/convert_numbers.c \
-			parsing/error.c \
+			parsing/error_exit.c \
 			parsing/has_duplicate.c \
+			parsing/parse_args.c \
 			operations/push.c \
 			operations/rotate.c \
 			operations/reverse_rotate.c \
-			operations/swap.c
+			operations/swap.c \
+			sorting/is_sorted.c
 	
 OBJS	= $(SRCS:.c=.o)
 

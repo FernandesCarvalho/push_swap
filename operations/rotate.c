@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:20:58 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 20:51:07 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/22 18:35:51 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	rotate(t_stack *stack)
 {
 	t_node	*temp;
 
-	if (!stack || !stack->head || !stack->head->next)
+	if (!stack || !stack->head || !stack->head->next || !stack->tail)
 		return ;
 	temp = stack->head;
 	stack->head = temp->next;
@@ -45,7 +45,7 @@ void	rb(t_stack *b)
 
 void	rr(t_stack *a, t_stack *b)
 {
-	if (a->size < 2 && b->size < 2)
+	if (!a || !b || a->size < 2 || b->size < 2)
 		return ;
 	rotate(a);
 	rotate(b);

@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 20:48:17 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/22 20:42:35 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,9 @@ void	free_split(char **split);
 void	add_node_back(t_stack *stack, t_node *new_node);
 t_node	*new_node(int value);
 void	free_stack(t_stack *stack);
+
+//                     ****   SORTING   ****
+
+int		is_sorted(t_stack *stack);
 
 #endif

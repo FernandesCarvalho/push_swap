@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:00:13 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 20:49:43 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/22 17:36:52 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	push(t_stack *dst, t_stack *src)
 
 void	pa(t_stack *a, t_stack *b)
 {
-	if (!b->head)
+	if (!a || !b || !b->head)
 		return ;
 	push(a, b);
 	write(1, "pa\n", 3);
@@ -50,7 +50,7 @@ void	pa(t_stack *a, t_stack *b)
 
 void	pb(t_stack *a, t_stack *b)
 {
-	if (!a->head)
+	if (!a || !b || !a->head)
 		return ;
 	push(b, a);
 	write(1, "pb\n", 3);
