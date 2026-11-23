@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   swap.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:32:06 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/20 12:45:02 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/22 18:05:54 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	swap(t_stack *stack)
 	t_node	*second;
 	t_node	*temp;
 
-	if (!stack->head || !stack->head->next)
+	if (!stack || !stack->head || !stack->head->next)
 		return ;
 	first = stack->head;
 	second = stack->head->next;
@@ -27,26 +27,33 @@ void	swap(t_stack *stack)
 	second->next = first;
 	first->next = temp;
 	first->prev = second;
-	stack->head = second;	
+	stack->head = second;
 	if (temp)
 		temp->prev = first;
 	else
 		stack->tail = first;
 }
+
 void	sa(t_stack *a)
 {
+	if (!a || a->size < 2)
+		return ;
 	swap(a);
 	write(1, "sa\n", 3);
 }
 
 void	sb(t_stack *b)
 {
+	if (!b || b->size < 2)
+		return ;
 	swap(b);
 	write(1, "sb\n", 3);
 }
 
 void	ss(t_stack *a, t_stack *b)
 {
+	if (!a || !b || a->size < 2 || b->size < 2)
+		return ;
 	swap(a);
 	swap(b);
 	write(1, "ss\n", 3);

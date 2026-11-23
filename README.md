@@ -1,157 +1,103 @@
-# Push_swap — Estado do projeto
+# Push_swap — Diário de Desenvolvimento do Projeto
 
-> Documento de acompanhamento para partilhar entre os dois membros da equipa. Atualizado em 21/11/2026 com base no código e nos testes partilhados na conversa. **Não substitui uma revisão do repositório:** ficheiros ou alterações não mostrados aqui devem ser confirmados no código atual.
+> Documento de acompanhamento atualizado em **22/11/2026** para sincronizar o estado atual da branch (`jeanlezy-dev`) entre os membros da dupla.
 
-## 1. Objetivo
+---
 
-Construir o programa `push_swap` em C: receber números inteiros, validá-los, organizar os valores na stack A e produzir no `stdout` uma sequência de instruções (`sa`, `pb`, `ra`, etc.) que os ordene usando as stacks A e B. Quando os valores já estão ordenados, não deve imprimir operações.
+## 1. Diário de Bordo
 
-## 2. Estrutura de pastas (atual/planeada)
+### 📅 22/11/2026 — Modularização do Parsing, Helpers de Ordenação e Integração no `main`
+
+1. **Extração e modularização do *parsing* (`parsing/parse_args.c`):**
+   * Movida a lógica principal de leitura de `argc`/`argv` do `main` para `parsing/parse_args.c`, dividida em `append_to_a()`, `process_token()` e `parse_args()`.
+   * Simplificado o fluxo de validação em `process_token()` para usar diretamente `convert_numbers()` (que já valida sinais, formato numérico e limites `INT_MIN`/`INT_MAX`), eliminando a redundância com `validate_number()`.
+   * Corrigidos detalhes críticos no `parse_args.c` (remoção de `;` acidental após `if (process_token(...))`, substituição de `free(split)` por `free_split(split)` para evitar *leaks* e remoção de comentários internos para conformidade com a **Norminette**).
+   * Renomeado `parsing/error.c` para `parsing/error_exit.c` para refletir o nome da função principal.
+
+2. **Alinhamento final nas Operações (`operations/`):**
+   * Padronizadas as verificações de ponteiros nulos e tamanho mínimo (`size >= 2`) nas operações duplas (`ss`, `rr`, `rrr`) em `swap.c`, `rotate.c` e `reverse_rotate.c`.
+
+3. **Criação da pasta `sorting/` e helper `is_sorted()`:**
+   * Criado `sorting/is_sorted.c` com a função `is_sorted(t_stack *stack)` para verificar se a pilha `a` já se encontra ordenada em ordem crescente.
+   * Adicionado o protótipo `int is_sorted(t_stack *stack);` em `push_swap.h`.
+
+4. **Atualização do `main.c`:**
+   * Conectados `parse_args()` e `is_sorted(&a)` no fluxo principal: se a pilha já estiver ordenada após o *parsing*, o programa liberta `a` e `b` com `free_stack()` e encerra com `return (0)` sem imprimir nenhuma operação.
+
+---
+
+### 📅 21/11/2026 — Resumo da Etapa Anterior (Base, Parsing Unitário e Operações)
+
+* **Infraestrutura:** configurado o `Makefile` na raiz com `-Wall -Wextra -Werror` e integração da `libft`, além das declarações iniciais em `push_swap.h`.
+* **Validação e Erros (`parsing/`):** finalizado `convert_numbers.c` com proteção de *overflow*/*underflow* (`check_overflow`), criado `has_duplicate.c` para rejeitar repetidos e implementadas `free_split()` e `error_exit()` (`Error\n` no `fd 2`).
+* **Gestão de Nós (`stack/`):** implementadas `new_node.c`, `add_node_back.c` e `free_stack.c` para manipulação e limpeza da lista duplamente ligada.
+* **Operações (`operations/`):** implementadas e protegidas contra `NULL` as operações `sa/sb/ss`, `pa/pb`, `ra/rb/rr` e `rra/rrb/rrr`.
+
+---
+
+## 2. Estrutura atual de pastas e ficheiros
 
 ```text
-push_swap/
+42-push_swap/
 ├── Makefile
+├── README.md
 ├── push_swap.h
-├── main.c                  # ainda usado para testes temporários
-├── libft/                  # biblioteca de apoio
+├── main.c                      # Fluxo principal (init_stack, parse_args, is_sorted, free_stack)
+├── main_jeanlezy.c             # Ficheiro auxiliar de transição/testes (remover após sync)
+├── libft/                      # Biblioteca de apoio
 ├── parsing/
-│   ├── validate_number.c   # implementada
-│   └── convert_number.c    # em desenvolvimento
+│   ├── parse_args.c            # append_to_a(), process_token(), parse_args()
+│   ├── convert_numbers.c       # check_overflow(), convert_numbers()
+│   ├── has_duplicate.c         # has_duplicate()
+│   ├── error_exit.c            # free_split(), error_exit()
+│   └── validate_number.c       # (obsoleto — substituído por convert_numbers)
+├── sorting/
+│   └── is_sorted.c             # is_sorted()
 ├── stack/
-│   └── add_node_back.c     # implementada e testada
-├── operations/
-│   ├── swap.c              # sa, sb, ss
-│   ├── push.c              # pa, pb
-│   ├── rotate.c            # ra, rb, rr
-│   └── reverse_rotate.c    # rra, rrb, rrr
-└── algorithms/             # ainda por implementar
+│   ├── add_node_back.c         # add_node_back()
+│   ├── new_node.c              # new_node()
+│   └── free_stack.c            # free_stack()
+└── operations/
+    ├── swap.c                  # swap(), sa(), sb(), ss()
+    ├── push.c                  # push(), pa(), pb()
+    ├── rotate.c                # rotate(), ra(), rb(), rr()
+    └── reverse_rotate.c        # reverse_rotate(), rra(), rrb(), rrr()
 ```
 
-Os nomes e a existência física de todos os ficheiros devem ser confirmados no repositório. Em particular, `convert_number.c` foi o nome sugerido para a função `convert_numbers()`.
+---
 
-## 3. Estruturas de dados
+## 3. Tabela de ficheiros e estado atual
 
-Lista duplamente ligada para cada stack:
-
-```c
-typedef struct s_node
-{
-    int             value;
-    struct s_node   *prev;
-    struct s_node   *next;
-} t_node;
-
-typedef struct s_stack
-{
-    t_node  *head;
-    t_node  *tail;
-    int     size;
-} t_stack;
-```
-
-- `head`: primeiro nó (topo).
-- `tail`: último nó.
-- `size`: número de elementos.
-- `prev`/`next`: ligações em ambos os sentidos.
-
-## 4. Funções já trabalhadas
-
-| Área | Função | Estado | Notas |
+| Pasta / Ficheiro | Funções | Estado | Observações |
 |---|---|---|---|
-| Stack | `add_node_back(t_stack *stack, t_node *new_node)` | Implementada e testada | Acrescenta ao final; atualiza `head`, `tail`, `prev`, `next` e `size`. |
-| Operações | `swap(t_stack *stack)` | Implementada e testada | Troca os dois primeiros nós; base para `sa`, `sb`, `ss`. |
-| Operações | `sa`, `sb`, `ss` | Implementadas e testadas | `ss` executa ambas as trocas e imprime uma única instrução. |
-| Operações | `push(t_stack *dst, t_stack *src)` | Implementada e testada | Move o primeiro nó da origem para o início do destino; ajusta tamanhos e extremos. |
-| Operações | `pa`, `pb` | Implementadas e testadas | Assinaturas mantêm sempre a ordem `(a, b)`; `pa` chama `push(a, b)` e `pb` chama `push(b, a)`. |
-| Operações | `rotate(t_stack *stack)` | Implementada e testada | Move o primeiro nó para o final; `size` inalterado. |
-| Operações | `ra`, `rb`, `rr` | Implementadas e testadas | `rr` roda ambas e imprime uma única instrução. |
-| Operações | `reverse_rotate(t_stack *stack)` | Implementada e testada | Move o último nó para o início; `size` inalterado. |
-| Operações | `rra`, `rrb`, `rrr` | Implementadas e testadas | `rrr` roda ambas e imprime uma única instrução. |
-| Parsing | `validate_number(char *str)` | Implementada; revisão lógica feita | Aceita sinal opcional no início e pelo menos um dígito; rejeita letras, sinais adicionais e string vazia. **Não verifica os limites de `int`.** |
-| Parsing | `convert_numbers(char *str, int *result)` | **Incompleta — não corrigida no código local** | Há uma proposta de correção para limites/overflow, mas o utilizador indicou que ainda não a aplicou. |
+| `Makefile` | Regras `all`, `$(NAME)`, `clean`, `fclean`, `re` | Atualizado | Garantir inclusão de `parsing/parse_args.c`, `parsing/error_exit.c` e `sorting/is_sorted.c` em `SRCS`. |
+| `push_swap.h` | Structs e protótipos globais | Atualizado | Inclui protótipo de `is_sorted()`; adicionar `parse_args()` e limpar `validate_number()` se removido. |
+| `main.c` | `init_stack`, `main` | Atualizado | Executa *parsing*, verifica `is_sorted(&a)` e liberta memória antes de sair. |
+| `parsing/parse_args.c` | `append_to_a`, `process_token`, `parse_args` | Implementado | Faz split por espaços, valida, converte, checa duplicados e monta a pilha `a`. |
+| `parsing/convert_numbers.c` | `check_overflow`, `convert_numbers` | Pronto | Valida formato numérico e limites `INT_MIN` / `INT_MAX` (<= 25 linhas). |
+| `parsing/has_duplicate.c` | `has_duplicate(t_stack *a, int value)` | Pronto | Rejeita valores duplicados antes da inserção. |
+| `parsing/error_exit.c` | `free_split`, `error_exit` | Pronto | Liberta `split`, `a` e `b`, escreve `Error\n` no `fd 2` e devolve `1`. |
+| `sorting/is_sorted.c` | `is_sorted(t_stack *stack)` | Implementado | Verifica se a pilha está em ordem crescente (`1` se ordenada, `0` caso contrário). |
+| `stack/*.c` | `new_node`, `add_node_back`, `free_stack` | Pronto | Alocação, inserção e libertação completa dos nós. |
+| `operations/*.c` | `sa/sb/ss`, `pa/pb`, `ra/rb/rr`, `rra/rrb/rrr` | Pronto | Todas as operações protegidas contra `NULL` e `size < 2`. |
 
-**Outras funções:** além destas, podem existir helpers no repositório (incluindo funções da Libft). Não foram inventariados nesta conversa; é necessário rever os ficheiros para completar a lista.
+---
 
-## 5. Testes realizados
+## 4. Checklist de progresso
 
-Foram executados `main.c` temporários com nós construídos manualmente e impressão do conteúdo das stacks:
+- [x] Implementar e validar `convert_numbers()`, `has_duplicate()` e `error_exit()`.
+- [x] Modularizar o *parsing* em `parsing/parse_args.c` com limpeza segura (`free_split`).
+- [x] Padronizar proteções de `NULL` e `size` em todas as operações (`operations/`).
+- [x] Criar `sorting/is_sorted.c` e integrar a saída antecipada sem operações no `main.c`.
+- [x] Remover ficheiros obsoletos/temporários (`parsing/validate_number.c` e `main_jeanlezy.c`) e atualizar `Makefile` / `push_swap.h`.
+- [x] Validar compilação (`make re`), `valgrind` (0 *leaks* em casos válidos e de erro) em todo o projeto.
+- [ ] Criar helpers adicionais de *stack* para ordenação (ex.: indexação/rank dos valores, encontrar mínimo/máximo).
+- [ ] Implementar ordenação para casos pequenos (2 a 5 elementos) e o algoritmo principal (100 e 500 números) / cálculo de *disorder* e flags (`--simple`, `--medium`, `--complex`, `--adaptive`, `--bench`), conforme o *subject*.
+- [ ] Testar sequências completas com `checker`, *leaks* (`valgrind`), Norminette final e atualizar o `README.md` de entrega.
 
-- `sa`, `sb`, `ss`: resultados de troca confirmados.
-- `pa`, `pb`: movimentos confirmados, incluindo esvaziar uma stack e tentar operar com origem vazia.
-- `ra`, `rb`, `rr`: rotações confirmadas, incluindo stack vazia e com um nó.
-- `rra`, `rrb`, `rrr`: rotações inversas confirmadas, incluindo stack vazia e com um nó.
+---
 
-Os resultados partilhados pelo terminal estavam coerentes com as operações. **Ainda falta** uma verificação sistemática da integridade dos ponteiros (`head`, `tail`, `prev`, `next`) e testes automatizados com sequências de operações.
+## 5. Próximos passos imediatos para a dupla
 
-### Convenções importantes
-
-- Wrappers `pa(a, b)` e `pb(a, b)` recebem sempre `(A, B)`. Só a chamada interna `push(dst, src)` inverte origem/destino quando necessário.
-- As operações duplas `ss`, `rr`, `rrr` imprimem **uma** linha, não duas.
-- As operações sem efeito devem ser evitadas pelo algoritmo; os wrappers foram ajustados para não imprimir quando nenhuma stack pode executar a operação.
-- `write(1, "rra\n", 4)`, `write(1, "rrb\n", 4)` e `write(1, "rrr\n", 4)`: o comprimento inclui `\n`.
-- `stdout` do programa final é reservado às instruções; `printf` de diagnóstico pertence apenas aos testes.
-
-## 6. Parsing — estado exato
-
-### `validate_number()`
-
-A implementação discutida:
-
-```c
-int validate_number(char *str)
-{
-    int i;
-
-    i = 0;
-    if (str[i] == '-' || str[i] == '+')
-        i++;
-    if (str[i] == '\0')
-        return (0);
-    while (str[i])
-    {
-        if (!ft_isdigit(str[i]))
-            return (0);
-        i++;
-    }
-    return (1);
-}
-```
-
-Verifica **formato**, não magnitude nem duplicados. A função pressupõe uma string válida (não `NULL`).
-
-### `convert_numbers()` — pendente
-
-A versão mais recente escrita pelo utilizador ainda:
-
-1. Calculava `res = res * 10 + digit` antes de verificar se o valor ultrapassava o limite, arriscando overflow com strings enormes.
-2. Rejeitava incorretamente `-2147483648` por comparar a magnitude positiva com `INT_MAX`.
-
-A solução discutida (ainda **não aplicada**) consiste em:
-
-- `long limit = INT_MAX;` e, para sinal negativo, `limit = -(long)INT_MIN;`.
-- Antes de atualizar `res`, calcular `digit = *str - '0'` e rejeitar se `res > (limit - digit) / 10`.
-- No fim, guardar `*result = (int)(res * sign)` e devolver `1`; devolver `0` em erro.
-- Usar `<limits.h>` para `INT_MIN`/`INT_MAX`.
-- Chamar a conversão **apenas depois** de `validate_number()`.
-
-A assinatura acordada é `int convert_numbers(char *str, int *result)`, para distinguir o número válido `0` de uma falha de conversão.
-
-## 7. O que falta fazer
-
-- [ ] Aplicar e testar a correção de `convert_numbers()` (`INT_MIN`, `INT_MAX`, números fora do intervalo, strings gigantes, `0`, sinais).
-- [ ] Integrar o parsing no `main` real e tratar `argc`/`argv` (argumentos separados e strings com números separados por espaços, conforme o enunciado).
-- [ ] Tratar argumentos vazios/inválidos, duplicados e erros de forma consistente.
-- [ ] Criar nós dinamicamente a partir dos números validados; definir libertação de memória e limpeza em caso de erro.
-- [ ] Criar/verificar helpers adicionais para stack, conforme necessidade do algoritmo (`new_node`, libertação, deteção de ordenação, etc.).
-- [ ] Implementar estratégias de ordenação e escolher a mais adequada conforme os requisitos do enunciado.
-- [ ] Integrar o Makefile, Libft, headers e todos os ficheiros `.c`.
-- [ ] Testar sequências completas com checker, casos extremos, leaks, Norminette e comportamento de saída.
-- [ ] Confirmar no enunciado os requisitos adicionais (flags, benchmarks, algoritmos e eventual bonus) antes de dar o projeto como concluído.
-
-## 8. Próximo passo recomendado
-
-**Terminar `convert_numbers()` e testar o parsing antes de implementar a ordenação.** Depois, implementar a criação/limpeza dos nós e só então começar os algoritmos.
-
-## 9. Nota para colaboração
-
-Este documento descreve **o que foi partilhado e testado durante as sessões**, não é uma auditoria ao estado atual do Git. Antes de dividir tarefas, confirmar os ficheiros reais, protótipos e eventuais funções já criadas fora destas sessões.
+1. **Indexação e casos pequenos:** implementar a atribuição de índices relativos (`0` a `n - 1`) na pilha `a` e a ordenação direta para pilhas pequenas (2, 3 e até 5 elementos).
+2. **Estratégia principal de ordenação:** implementar o algoritmo para pilhas maiores (100 e 500 elementos) respeitando as metas de operações do enunciado.

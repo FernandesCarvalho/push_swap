@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 11:47:32 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/22 20:49:08 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <stdio.h>
+# include "libft.h"
 
 typedef struct s_node
 {
 	int	value;
 	struct s_node	*prev;
 	struct s_node	*next;
-
 } t_node;
 
 typedef struct s_stack
@@ -64,11 +64,21 @@ void	rrr(t_stack *a, t_stack *b);
 
 //                             ****     PARSING     ****
 
-int	validate_number(char *str);
-
+int		validate_number(char *str);
+int		has_duplicate(t_stack *a, int value);
+int		convert_numbers(char *str, int *result);
+int		error_exit(t_stack *a, t_stack *b, char **split);
+void	free_split(char **split);
+int	parse_args(int argc, char **argv, t_stack *a, t_stack *b);
 
 //                             ****     STACK     ****
 
 void	add_node_back(t_stack *stack, t_node *new_node);
+t_node	*new_node(int value);
+void	free_stack(t_stack *stack);
+
+//                     ****   SORTING   ****
+
+int		is_sorted(t_stack *stack);
 
 #endif

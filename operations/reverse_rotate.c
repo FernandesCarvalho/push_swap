@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reverse_rotate.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:00:44 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/21 10:46:45 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/22 18:36:19 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	reverse_rotate(t_stack *stack)
 {
 	t_node	*temp;
 
-	if (!stack->head || !stack->head->next)
+	if (!stack || !stack->head || !stack->head->next || !stack->tail)
 		return ;
 	temp = stack->tail;
 	stack->tail = temp->prev;
@@ -29,7 +29,7 @@ void	reverse_rotate(t_stack *stack)
 
 void	rra(t_stack *a)
 {
-	if (a->size < 2)
+	if (!a || a->size < 2)
 		return ;
 	reverse_rotate(a);
 	write(1, "rra\n", 4);
@@ -37,7 +37,7 @@ void	rra(t_stack *a)
 
 void	rrb(t_stack *b)
 {
-	if (b->size < 2)
+	if (!b || b->size < 2)
 		return ;
 	reverse_rotate(b);
 	write(1, "rrb\n", 4);
@@ -45,7 +45,7 @@ void	rrb(t_stack *b)
 
 void	rrr(t_stack *a, t_stack *b)
 {
-	if (a->size < 2 && b->size < 2)
+	if (!a || !b || a->size < 2 || b->size < 2)
 		return ;
 	reverse_rotate(a);
 	reverse_rotate(b);
