@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:00:44 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/22 18:36:19 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/24 11:04:27 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,19 @@ void	rrb(t_stack *b)
 
 void	rrr(t_stack *a, t_stack *b)
 {
-	if (!a || !b || a->size < 2 || b->size < 2)
-		return ;
-	reverse_rotate(a);
-	reverse_rotate(b);
-	write(1, "rrr\n", 4);
+	int	did_rev_rot;
+
+	did_rev_rot = 0;
+	if (a && a->size >= 2)
+	{
+		reverse_rotate(a);
+		did_rev_rot = 1;
+	}
+	if (b && b->size >= 2)
+	{
+		reverse_rotate(b);
+		did_rev_rot = 1;
+	}
+	if (did_rev_rot)
+		write(1, "rrr\n", 4);
 }

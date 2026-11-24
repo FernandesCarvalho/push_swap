@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:20:58 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/22 18:35:51 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/24 11:01:36 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,19 @@ void	rb(t_stack *b)
 
 void	rr(t_stack *a, t_stack *b)
 {
-	if (!a || !b || a->size < 2 || b->size < 2)
-		return ;
-	rotate(a);
-	rotate(b);
-	write(1, "rr\n", 3);
+	int	did_rotate;
+
+	did_rotate = 0;
+	if (a && a->size >= 2)
+	{
+		rotate(a);
+		did_rotate = 1;
+	}
+	if (b && b->size >= 2)
+	{
+		rotate(b);
+		did_rotate = 1;
+	}
+	if (did_rotate)
+		write(1, "rr\n", 3);
 }

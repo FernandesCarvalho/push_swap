@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:32:06 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/22 18:05:54 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/24 11:02:15 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,19 @@ void	sb(t_stack *b)
 
 void	ss(t_stack *a, t_stack *b)
 {
-	if (!a || !b || a->size < 2 || b->size < 2)
-		return ;
-	swap(a);
-	swap(b);
-	write(1, "ss\n", 3);
+	int	did_swap;
+
+	did_swap = 0;
+	if (a && a->size >= 2)
+	{
+		swap(a);
+		did_swap = 1;
+	}
+	if (b && b->size >= 2)
+	{
+		swap(b);
+		did_swap = 1;
+	}
+	if (did_swap)
+		write(1, "ss\n", 3);
 }

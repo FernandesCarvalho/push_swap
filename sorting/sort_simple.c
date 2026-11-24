@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sort_simple.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/23 23:26:23 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/24 00:10:00 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/24 11:27:34 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 //organiza os numeros de forma simples, porém 
 //nao funciona com muitos numeros 
+// Selection Sort adapatado p/ duas stacks
 void	sort_simple(t_stack *a, t_stack *b)
 {
 	if (!a || !b || a->size <= 1 || b->size != 0)
