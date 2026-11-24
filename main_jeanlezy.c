@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_jeanlezy.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/22 20:46:02 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/22 20:46:06 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/24 00:47:30 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,16 @@ int	main(int argc, char **argv)
 		free_stack(&b);
 		return (0);
 	}
+	if (a.size == 2)
+		sort_two(&a);
+	else if (a.size == 3)
+		sort_three(&a);
+	else if (a.size == 4)
+		sort_four(&a, &b);
+	else if (a.size == 5)
+		sort_five(&a, &b);
+	else if (a.size > 5)
+		sort_simple(&a, &b);
 	free_stack(&a);
 	free_stack(&b);
 	return (0);

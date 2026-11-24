@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/22 20:49:08 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/24 00:51:46 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 typedef struct s_node
 {
 	int	value;
+	int	index;
 	struct s_node	*prev;
 	struct s_node	*next;
 } t_node;
@@ -32,6 +33,8 @@ typedef struct s_stack
 	t_node	*tail;
 	int		size;
 } t_stack;
+
+//========================================================================================================
 
 //                             ****     OPERATIONS     ****
 
@@ -62,6 +65,8 @@ void	rra(t_stack *a);
 void	rrb(t_stack *b);
 void	rrr(t_stack *a, t_stack *b);
 
+//========================================================================================================
+
 //                             ****     PARSING     ****
 
 int		validate_number(char *str);
@@ -69,7 +74,9 @@ int		has_duplicate(t_stack *a, int value);
 int		convert_numbers(char *str, int *result);
 int		error_exit(t_stack *a, t_stack *b, char **split);
 void	free_split(char **split);
-int	parse_args(int argc, char **argv, t_stack *a, t_stack *b);
+int		parse_args(int argc, char **argv, t_stack *a, t_stack *b);
+
+//========================================================================================================
 
 //                             ****     STACK     ****
 
@@ -77,8 +84,30 @@ void	add_node_back(t_stack *stack, t_node *new_node);
 t_node	*new_node(int value);
 void	free_stack(t_stack *stack);
 
-//                     ****   SORTING   ****
+//========================================================================================================
+
+//                             ****     SORTING     ****
+
+//                  #INDEXING
+
+void	assign_index(t_stack *a);
+
+//                  #UTILS
 
 int		is_sorted(t_stack *stack);
+int		find_min_pos(t_stack *a);
+int		ft_sqrt(int n);
+void	push_min_to_b(t_stack *a, t_stack *b);
+
+//                  #SIMPLE
+
+void	sort_simple(t_stack *a, t_stack *b);
+
+//                  #SMALL
+
+void	sort_two(t_stack *a);
+void	sort_three(t_stack *a);
+void	sort_four(t_stack *a, t_stack *b);
+void	sort_five(t_stack *a, t_stack *b);
 
 #endif

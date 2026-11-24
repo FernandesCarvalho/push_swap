@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+         #
+#    By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/21 17:33:56 by jeanbarr          #+#    #+#              #
-#    Updated: 2026/11/22 20:44:39 by jeanbarr         ###   ########.fr        #
+#    Updated: 2026/11/24 00:46:36 by fercarva         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,11 @@ SRCS	= main_jeanlezy.c \
 			operations/rotate.c \
 			operations/reverse_rotate.c \
 			operations/swap.c \
-			sorting/is_sorted.c
+			sorting/sort_utils.c \
+			sorting/sort_small.c \
+			sorting/sort_simple.c \
+			sorting/sort_medium.c \
+			sorting/indexing.c
 	
 OBJS	= $(SRCS:.c=.o)
 
