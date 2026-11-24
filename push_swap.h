@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/24 13:11:58 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/24 18:34:43 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,27 @@ typedef struct s_stack
 	int		size;
 } t_stack;
 
+typedef struct s_chunk
+{
+	int start;
+	int end;
+	int mid;
+}	t_chunk;
+
+typedef enum e_strategy // Guarda a estratégia escolhida
+{
+	STRAT_ADAPTIVE,
+	STRAT_SIMPLE,
+	STRAT_MEDIUM,
+	STRAT_COMPLEX
+}	t_strategy;
+
+typedef struct s_config
+{
+	t_strategy	strategy;
+	int			bench; //Indica se o benchmark está ativo
+	int			arg_start; //Indica onde começam os números em argv
+}	t_config;
 //========================================================================================================
 
 //                             ****     OPERATIONS     ****
@@ -74,7 +95,13 @@ int		has_duplicate(t_stack *a, int value);
 int		convert_numbers(char *str, int *result);
 int		error_exit(t_stack *a, t_stack *b, char **split);
 void	free_split(char **split);
-int		parse_args(int argc, char **argv, t_stack *a, t_stack *b);
+int		parse_args(int argc, char **argv, t_stack *a, t_stack *b, int start);
+
+void	parse_flags(int argc, char **argv, t_config *config); //
+int		set_strategy(t_config *config, char *arg);//
+int		set_bench(t_config *config, char *arg); //
+void	init_config(t_config *config); //
+
 
 //========================================================================================================
 
@@ -94,20 +121,23 @@ void	assign_index(t_stack *a);
 
 //                  #UTILS
 
-int		is_sorted(t_stack *stack);
-int		find_min_pos(t_stack *a);
+int		is_sorted(t_stack *stack);//
+int		find_min_pos(t_stack *a); //
 int		ft_sqrt(int n);
-void	push_min_to_b(t_stack *a, t_stack *b);
-int		find_max_pos(t_stack *b);
+void	push_min_to_b(t_stack *a, t_stack *b); //
+int		find_max_pos(t_stack *b); //
 
 //                  #SIMPLE
 
 void	sort_simple(t_stack *a, t_stack *b);
 
 //                  #MEDIUM
-void	push_max_to_a(t_stack *a, t_stack *b); //
-void	push_chunks_to_b(); //
-void	push_back_to_a(); //
+void	sort_medium(t_stack *a, t_stack *b);//
+void	push_max_to_a(t_stack *a, t_stack *b);//
+void	push_chunk_node(t_stack *a, t_stack *b, int *pushed, t_chunk *chunk);//
+void	push_chunks_to_b(t_stack *a, t_stack *b);//
+void	push_back_to_a(t_stack *a, t_stack *b);//
+
 //                  #SMALL
 
 void	sort_two(t_stack *a);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+         #
+#    By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/21 17:33:56 by jeanbarr          #+#    #+#              #
-#    Updated: 2026/11/24 00:46:36 by fercarva         ###   ########.fr        #
+#    Updated: 2026/11/24 18:12:58 by jeanbarr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,11 +24,11 @@ SRCS	= main_jeanlezy.c \
 			stack/add_node_back.c \
 			stack/free_stack.c \
 			stack/new_node.c \
-			parsing/validate_number.c \
 			parsing/convert_numbers.c \
 			parsing/error_exit.c \
 			parsing/has_duplicate.c \
 			parsing/parse_args.c \
+			parsing/parse_flags.c \
 			operations/push.c \
 			operations/rotate.c \
 			operations/reverse_rotate.c \
@@ -37,7 +37,8 @@ SRCS	= main_jeanlezy.c \
 			sorting/sort_small.c \
 			sorting/sort_simple.c \
 			sorting/sort_medium.c \
-			sorting/indexing.c
+			sorting/indexing.c \
+			sorting/chunk_utils.c
 	
 OBJS	= $(SRCS:.c=.o)
 

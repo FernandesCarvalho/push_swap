@@ -6,16 +6,16 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 11:57:20 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/24 13:07:44 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/24 17:23:28 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
+
 int	find_max_pos(t_stack *b)
 {
-	int		pos;// pos; guarda a posição (começando em 0 no topo) 
-			// onde foi encontrado o maior index até ao momento.
-	int		val; //guarda o maior index encontrado até ao momento
+	int		pos;
+	int		val;
 	int		i;
 	t_node	*current;
 
@@ -23,21 +23,21 @@ int	find_max_pos(t_stack *b)
 		return (0);
 	current = b->head;
 	i = 0;
-	val = current->index; //assume que index do primeiro node = maior
-	pos = 0; // como inicial ta no topo posicao inicial 0
+	val = current->index;
+	pos = 0;
 	while (current)
 	{
-		if (current->index > val) // compara o index do nó atual com o maior index 
-								  // registrado em val
+		if (current->index > val)
 		{
-			val = current->index; // atualiza val com esse novo maior index
-			pos = i; // guarda em pos a posição i em que esse novo máximo foi encontrado
+			val = current->index;
+			pos = i;
 		}
 		current = current->next;
 		i++;
 	}
 	return (pos);
 }
+
 void	push_max_to_a(t_stack *a, t_stack *b)
 {
 	int	pos;
@@ -49,34 +49,70 @@ void	push_max_to_a(t_stack *a, t_stack *b)
 	pos = find_max_pos(b);
 	if (pos <= b->size / 2)
 	{
-		while(i < pos)
-		{
+		while (i++ < pos)
 			rb(b);
-			i++;	
-		}
 	}
 	else
 	{
 		i = b->size;
-		while(i > pos)
-		{
+		while (i-- > pos)
 			rrb(b);
-			i--;	
-		}
 	}
 	pa(a, b);
-	/* Primeiro, distribuímos os elementos de A para B usando chunks.
-	Depois, A fica vazia e B contém todos os elementos.
-	Agora queremos devolver os elementos de B para A, começando pelo maior. */
 }
 
-push_chunks_to_b(): envia os números de A para B.
-/* Enquanto A não estiver vazia:
-    Se o index do primeiro elemento pertence ao chunk:
-        pb()
-    Se o index for pequeno:
-        rb()
-    Caso contrário:
-        ra() */
+void	push_chunk_node(t_stack *a, t_stack *b, int *pushed, t_chunk *chunk)
+{
+	int	index;
 
-push_back_to_a(): devolve os números de B para A na ordem correta.
+	if (!a || !a->head || !b || !chunk)
+		return ;
+	index = a->head->index;
+	if (index >= chunk->start && index < chunk->end)
+	{
+		pb(a, b);
+		if (index < chunk->mid)
+			rb(b);
+		(*pushed)++;
+	}
+	else
+		ra(a);
+}
+
+static void	next_chunk(t_chunk *chunk, int *target, int chunk_size, int total)
+{
+	chunk->start = chunk->end;
+	*target = total - chunk->start;
+	if (*target > chunk_size)
+		*target = chunk_size;
+	chunk->end = chunk->start + *target;
+	chunk->mid = chunk->start + *target / 2;
+}
+
+void	push_chunks_to_b(t_stack *a, t_stack *b)
+{
+	int		chunk_size;
+	int		pushed;
+	int		target;
+	int		total;
+	t_chunk	chunk;
+
+	if (!a || !b || a->size == 0)
+		return ;
+	total = a->size;
+	chunk_size = ft_sqrt(total);
+	pushed = 0;
+	target = chunk_size;
+	chunk.start = 0;
+	chunk.end = target;
+	chunk.mid = target / 2;
+	while (a->size > 0)
+	{
+		push_chunk_node(a, b, &pushed, &chunk);
+		if (pushed == target)
+		{
+			next_chunk(&chunk, &target, chunk_size, total);
+			pushed = 0;
+		}
+	}
+}
