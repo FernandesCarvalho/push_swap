@@ -2,30 +2,30 @@
 
 # Push_swap — Estado do projeto
 
-**Atualizado: 24/11/2026 | Fase atual: início do Medium (Chunk Sort)**
+**Atualizado: 24/11/2026 | Fase atual: Medium validado + Parsing de flags integrado (próximo: Complex, Disorder e Benchmark)**
 
-Documento de desenvolvimento para sincronizar a dupla. Baseado nos ZIPs de 23/11, no README anterior, no código e nos testes partilhados posteriormente e no enunciado Push_swap v1.2. As alterações mais recentes ainda devem ser confirmadas no Git; este documento não certifica a compilação ou os testes do repositório atual.
+Documento de desenvolvimento para sincronizar a dupla. Baseado no README anterior, nos ficheiros atuais do repositório (`Makefile`, `push_swap.h`, `main_jeanlezy.c`, `parsing/`, `sorting/`, `stack/`, `operations/`) e nos testes executados com `./checker_linux` e `valgrind`.
 
 ## Description — Objetivo
 
-Ordenar números inteiros em ordem crescente na stack A, utilizando uma stack auxiliar B e apenas as 11 operações permitidas. O programa deve minimizar as operações emitidas, implementar quatro estratégias e selecionar a estratégia adequada em tempo de execução.
+Ordenar números inteiros em ordem crescente na stack A, utilizando uma stack auxiliar B e apenas as 11 operações permitidas. O programa deve minimizar as operações emitidas, implementar quatro estratégias (`simple`, `medium`, `complex` e `adaptive`) e selecionar a estratégia adequada em tempo de execução.
 
 ## 1. Estado geral
 
 | Etapa | Estado |
 |---|---|
-| Estruturas, Libft e Makefile | Implementados; revisão final pendente |
-| Parsing e tratamento de erros | Implementados; testes manuais realizados |
-| 11 operações | Implementadas; testes manuais realizados; revisão das operações duplas pendente |
-| Ordenação de 2 a 5 elementos | Implementada e testada manualmente |
-| Simple — O(n²) | Implementado e testado manualmente |
-| Indexação | Implementada; teste confirmado |
-| `ft_sqrt()` | Versão final definida; confirmar integração e testar |
-| Medium — O(n√n) | Em início de desenvolvimento |
-| Complex — O(n log n) | Planeado |
-| Disorder e Adaptive | Pendentes |
-| Flags e benchmark | Pendentes |
-| Testes finais, Norminette e memória | Pendentes |
+| Estruturas, Libft e Makefile | Implementados e compilando sem avisos (`-Wall -Wextra -Werror`) |
+| Parsing de argumentos numéricos e tratamento de erros | Implementados e validados (`parse_args` recebe `start`) |
+| Parsing de flags (`--simple`, `--medium`, `--complex`, `--adaptive`, `--bench`) | Implementado (`parse_flags.c` + `t_config`) e testado |
+| 11 operações | Implementadas; testes realizados; revisão final das operações duplas pendente |
+| Ordenação de 2 a 5 elementos | Implementada e validada (`sort_small.c`) |
+| Simple — $O(n^2)$ | Implementado e validado (`sort_simple.c`) |
+| Indexação e `ft_sqrt()` | Implementados e validados (`indexing.c`, `sort_utils.c`) |
+| Medium — $O(n\sqrt{n})$ (Chunk Sort) | **Implementado e validado** (`sort_medium.c`, `chunk_utils.c`) — 20/20 testes `OK` para 100 e 500 números |
+| Complex — $O(n \log n)$ | Planeado (próxima etapa) |
+| Disorder (`compute_disorder`) e regime Adaptive | Pendentes (atualmente `--adaptive` encaminha para o fluxo existente) |
+| Saída do `--bench` (contagem das 11 operações no `stderr`) | Pendente (`config.bench` já é lido e armazenado) |
+| Testes finais, Norminette e memória | Em andamento (`valgrind` já validado com 0 leaks no fluxo atual) |
 | Checker próprio (bonus) | Pendente; opcional |
 
 ## 2. Estrutura atual de trabalho
@@ -34,15 +34,15 @@ Ordenar números inteiros em ordem crescente na stack A, utilizando uma stack au
 push_swap/
 ├── Makefile
 ├── push_swap.h
-├── main.c                  # testes antigos
-├── main_jeanlezy.c         # main utilizado atualmente
+├── checker_linux           # binário de validação local (não entregar)
+├── main_jeanlezy.c         # main utilizado atualmente (renomear/limpar na entrega)
 ├── libft/
 ├── parsing/
-│   ├── validate_number.c
 │   ├── convert_numbers.c
 │   ├── has_duplicate.c
 │   ├── error_exit.c
-│   └── parse_args.c
+│   ├── parse_args.c
+│   └── parse_flags.c
 ├── stack/
 │   ├── new_node.c
 │   ├── add_node_back.c
@@ -57,52 +57,76 @@ push_swap/
     ├── sort_utils.c
     ├── sort_simple.c
     ├── indexing.c
-    ├── sort_medium.c       # a desenvolver
+    ├── chunk_utils.c
+    ├── sort_medium.c
     ├── sort_complex.c      # planeado
     └── sort_adaptive.c     # planeado
 ```
 
-Confirmar a remoção de `sorting/is_sorted.c` da compilação, pois `is_sorted()` passou para `sort_utils.c`. Confirmar os nomes e protótipos após as alterações recentes.
+*Nota:* `parsing/validate_number.c` foi removido da compilação e do repositório por já estar coberto por `convert_numbers.c` (confirmar remoção do protótipo residual em `push_swap.h` na limpeza final).
 
 ## 3. Estruturas de dados
 
-Lista duplamente ligada. Estrutura pretendida após a indexação:
+### Pilhas e nós (`t_node`, `t_stack`)
+
+Lista duplamente ligada com ponteiros para topo (`head`), fundo (`tail`) e contador (`size`):
 
 ```c
 typedef struct s_node
 {
-    int             value;
-    int             index;
-    struct s_node   *prev;
-    struct s_node   *next;
-} t_node;
+	int				value;
+	int				index;
+	struct s_node	*prev;
+	struct s_node	*next;
+}	t_node;
 
 typedef struct s_stack
 {
-    t_node  *head;
-    t_node  *tail;
-    int     size;
-} t_stack;
+	t_node	*head;
+	t_node	*tail;
+	int		size;
+}	t_stack;
 ```
 
-`value` guarda o inteiro original; `index` representa a posição que o valor teria na lista ordenada (0 = menor). `head` é o topo, `tail` é o fundo e `size` é o número de nós. Confirmar a inicialização de `index` em `new_node()`; recomenda-se `-1` antes da indexação. As operações movem nós, preservando a associação entre valor e índice.
+### Chunks e configuração de execução (`t_chunk`, `t_strategy`, `t_config`)
+
+```c
+typedef struct s_chunk
+{
+	int	start;
+	int	end;
+	int	mid;
+}	t_chunk;
+
+typedef enum e_strategy
+{
+	STRAT_ADAPTIVE,
+	STRAT_SIMPLE,
+	STRAT_MEDIUM,
+	STRAT_COMPLEX
+}	t_strategy;
+
+typedef struct s_config
+{
+	t_strategy	strategy;
+	int			bench;
+	int			arg_start;
+}	t_config;
+```
+
+`t_config` armazena a estratégia escolhida (padrão `STRAT_ADAPTIVE`), se `--bench` está ativo (`0` ou `1`) e `arg_start`, o índice em `argv` onde terminam as flags e começam os números.
 
 ## 4. Funções implementadas
 
 ### Parsing e gestão de memória
 
-| Função | Responsabilidade |
+| Ficheiro / Função | Responsabilidade |
 |---|---|
-| `validate_number()` | Validar o formato numérico; helper anterior, confirmar se ainda é utilizado |
-| `convert_numbers()` | Validar e converter para int, incluindo limites e proteção de overflow |
-| `has_duplicate()` | Detetar números repetidos |
-| `parse_args()` | Percorrer argumentos, separar por espaços, validar e preencher A |
-| `append_to_a()` / `process_token()` | Helpers internos do parsing |
-| `free_split()` / `error_exit()` | Limpar memória e emitir `Error\n` no stderr em caso de erro |
-| `new_node()` | Criar nó dinamicamente |
-| `add_node_back()` | Adicionar nó ao fundo da stack |
-| `free_stack()` | Libertar os nós da stack |
-| `init_stack()` | Inicializar head, tail e size no main |
+| `parse_flags.c` (`init_config`, `set_bench`, `set_strategy`, `parse_flags`, `same_str`) | Lê flags iniciais (`--simple`, `--medium`, `--complex`, `--adaptive`, `--bench`) usando `ft_strncmp` e define `config->arg_start` |
+| `parse_args.c` (`parse_args`, `process_token`, `append_to_a`) | Percorre `argv` a partir de `start`, separa tokens por `' '`, valida e preenche a stack A |
+| `convert_numbers.c` / `has_duplicate.c` | Valida formato numérico, limites `INT_MIN`/`INT_MAX`, overflow e duplicados |
+| `error_exit.c` / `free_stack()` | Liberta memória (`split` e pilhas) e emite `Error\n` no `stderr` |
+| `new_node()` / `add_node_back()` | Criação e inserção de nós na lista duplamente ligada |
 
 ### Operações
 
@@ -113,168 +137,47 @@ typedef struct s_stack
 | `ra`, `rb`, `rr` | Mover o primeiro elemento para o fundo |
 | `rra`, `rrb`, `rrr` | Mover o último elemento para o topo |
 
-Helpers internos: `swap()`, `push()`, `rotate()`, `reverse_rotate()`. Os wrappers `pa(a,b)` e `pb(a,b)` mantêm a ordem dos argumentos A, B. Cada operação dupla deve emitir uma única instrução.
+**Revisão pendente:** confirmar na revisão final se `ss`, `rr` e `rrr` executam cada lado de forma independente quando apenas uma das stacks tem tamanho $\ge 2$.
 
-**Revisão necessária:** no ZIP anterior, `ss`, `rr` e `rrr` retornavam quando qualquer stack tinha menos de dois elementos. Confirmar e corrigir a semântica: cada lado deve poder executar a sua parte independentemente, mesmo quando o outro não pode. Não confundir implementação existente com conformidade final.
+### Ordenação pequena e utilitários (`sort_small.c`, `sort_utils.c`, `indexing.c`)
 
-### Ordenação de stacks pequenas — `sort_small.c`
-
-- `sort_two()`: compara os dois valores e executa `sa` se necessário.
-- `sort_three()`: coloca o maior no fundo com `ra` ou `rra`, depois corrige os dois primeiros com `sa` se necessário.
-- `sort_four()`: envia o menor para B, ordena os três restantes e recupera o menor.
-- `sort_five()`: envia os dois menores para B, ordena os três restantes e recupera ambos.
-
-### Helpers — `sort_utils.c`
-
-- `is_sorted()`: verifica a ordem crescente, sem modificar a stack.
-- `find_min_pos()`: percorre a stack e encontra a posição física do menor valor.
-- `push_min_to_b()`: anteriormente `push_to_b()`; usa `ra` ou `rra` pelo caminho mais curto até ao menor e executa `pb`.
-- `ft_sqrt()`: calcula a raiz quadrada inteira, arredondada para baixo, para definir o tamanho dos chunks.
+- `sort_two()`, `sort_three()`, `sort_four()`, `sort_five()`: ordenação dedicada para entradas de 2 a 5 elementos.
+- `is_sorted()`: verifica ordem crescente sem modificar a stack.
+- `find_min_pos()` / `push_min_to_b()`: localiza o menor valor e envia para B pelo caminho mais curto (`ra` ou `rra`).
+- `ft_sqrt()`: calcula $\lfloor \sqrt{n} \rfloor$ sem risco de overflow (`i <= n / i`).
+- `assign_index()`: atribui a cada nó a sua posição ordenada (`0` a `n - 1`) sem alterar a ordem física da stack.
 
 ## 5. Simple — `sort_simple.c`
 
-Estratégia de extração sucessiva do mínimo (adaptação de Selection Sort):
+Adaptação de *Selection Sort* para duas stacks ($O(n^2)$ operações, $O(1)$ memória auxiliar):
+1. Enquanto A tiver mais de 2 elementos, envia o menor para B (`push_min_to_b`).
+2. Ordena os 2 restantes em A com `sort_two()`.
+3. Devolve todos os elementos de B para A com `pa`.
 
-1. Enquanto A tiver mais de dois elementos, mover o menor para B.
-2. Ordenar os dois restantes com `sort_two()`.
-3. Recuperar todos os elementos de B com `pa`.
+## 6. Medium — `sort_medium.c` e `chunk_utils.c` (Validado)
 
-Como os mínimos são enviados por ordem crescente, B fica com os maiores desses mínimos no topo. Ao recuperá-los, A fica ordenada. Cada extração pode exigir O(n) rotações; repetida O(n) vezes, resulta em O(n²) operações no pior caso. Memória auxiliar do algoritmo: O(1), além dos nós das duas stacks (O(n)).
+Estratégia baseada em *Chunk Sort* sobre os índices normalizados ($O(n\sqrt{n})$):
 
-A versão atual deixa dois elementos por decisão de implementação. Deixar três é uma possível otimização futura.
+1. `assign_index(a)` calcula o índice final (`0` a `n - 1`) de cada nó.
+2. `push_chunks_to_b()` define `chunk_size = ft_sqrt(total)` e percorre A enviando para B os elementos do intervalo atual `[chunk.start, chunk.end)`:
+   - Elementos da metade inferior do chunk (`index < chunk.mid`) recebem `rb(b)` após `pb(a, b)`, pré-organizando B em formato ampulheta (maiores nas extremidades, menores no meio).
+   - Ao completar o chunk (`pushed == target`), `next_chunk()` avança para o intervalo seguinte, ajustando o último chunk caso `total` não seja múltiplo exato de `chunk_size`.
+3. `push_back_to_a()` chama `push_max_to_a()` enquanto B não estiver vazia, localizando o maior índice (`find_max_pos`) e rodando B pelo caminho mais curto (`rb` se `pos <= b->size / 2`, caso contrário `rrb`) antes de executar `pa(a, b)`.
 
-## 6. Indexação — `indexing.c`
+### Resultados medidos no Medium (`./checker_linux`)
 
-`assign_index()` atribui a cada nó o número de valores inferiores ao seu próprio valor. Não ordena nem modifica fisicamente a stack.
+- **100 números (20 rodadas aleatórias):** **20/20 `OK`**, entre **759 e 824 operações** (meta mínima: `< 2000`; meta "Bom": `< 1500`).
+- **500 números (20 rodadas aleatórias):** **20/20 `OK`**, entre **7357 e 7680 operações** (meta mínima: `< 12000`; meta "Bom": `< 8000`).
 
-```c
-void assign_index(t_stack *a)
-{
-    int     index;
-    t_node  *check;
-    t_node  *current;
+## 7. Próximas etapas: Complex, Disorder e Benchmark
 
-    if (!a || a->size < 1)
-        return ;
-    current = a->head;
-    while (current)
-    {
-        check = a->head;
-        index = 0;
-        while (check)
-        {
-            if (current->value > check->value)
-                index++;
-            check = check->next;
-        }
-        current->index = index;
-        current = current->next;
-    }
-}
-```
-
-Teste confirmado no terminal:
-
-```text
-Value: 42 | Index: 3
-Value: -15 | Index: 0
-Value: 800 | Index: 4
-Value: 0 | Index: 1
-Value: 7 | Index: 2
-ra
-pb
-ra
-pb
-pa
-pa
-```
-
-Complexidade computacional O(n²), memória auxiliar O(1), zero operações Push_swap. O enunciado (§VI.3.1) mede as classes obrigatórias pelo número de operações geradas, portanto não é obrigatório substituir esta indexação por Merge Sort ou pesquisa binária para cumprir esse modelo. Uma otimização de CPU pode ser feita posteriormente.
-
-## 7. Nova função `ft_sqrt()`
-
-Versão final proposta para `sort_utils.c`:
-
-```c
-int ft_sqrt(int n)
-{
-    int i;
-
-    if (n < 1)
-        return (0);
-    i = 1;
-    while (i <= n / i)
-        i++;
-    return (i - 1);
-}
-```
-
-Calcula o maior inteiro cujo quadrado não ultrapassa n. Utiliza divisão para evitar overflow da multiplicação. Tempo computacional O(√n), memória O(1), zero operações Push_swap.
-
-| n | Resultado esperado |
-|---:|---:|
-| 0 | 0 |
-| 1 | 1 |
-| 15 | 3 |
-| 16 | 4 |
-| 100 | 10 |
-| 500 | 22 |
-| INT_MAX (32 bits) | 46340 |
-
-Adicionar `int ft_sqrt(int n);` ao header e confirmar os testes. Não foi apresentado ainda o resultado da compilação desta versão.
-
-## 8. Fase atual — Medium (Chunk Sort)
-
-Objetivo: O(n√n) operações. Usar os índices para dividir os elementos em intervalos de tamanho aproximadamente √n.
-
-Exemplo: 16 elementos, chunks de tamanho 4:
-
-| Chunk | Índices |
-|---|---|
-| 1 | 0–3 |
-| 2 | 4–7 |
-| 3 | 8–11 |
-| 4 | 12–15 |
-
-Plano inicial:
-
-1. Calcular `chunk_size = ft_sqrt(a->size)` e garantir tamanho positivo para entrada não vazia.
-2. Percorrer A e enviar para B os elementos do intervalo atual.
-3. Repetir para os restantes intervalos, incluindo o último incompleto.
-4. Recuperar elementos de B por índice decrescente, escolhendo o caminho mais curto.
-5. Verificar que A está ordenada e B vazia.
-
-**Atenção à complexidade:** enviar os chunks para B com um percurso por intervalo pode custar O(n√n) operações. Porém, procurar e rodar até ao máximo em toda B repetidamente, sem controlar a disposição dos elementos, pode custar O(n²) operações. Precisamos de manter os chunks organizados em B (por exemplo, blocos contíguos por intervalo) e limitar as rotações durante a recuperação. A estratégia final deve ter uma justificação do limite O(n√n); ainda não está implementada nem demonstrada.
-
-Próximas tarefas imediatas:
-
-- [ ] Confirmar `ft_sqrt()` e protótipo.
-- [ ] Remover impressões temporárias de índices do main.
-- [ ] Criar `sort_medium.c` e atualizar header/Makefile.
-- [ ] Implementar transferência por intervalos e organização de B.
-- [ ] Implementar recuperação por máximo com limite de rotações por chunk.
-- [ ] Integrar temporariamente o Medium no main e testar.
-- [ ] Medir operações e justificar a complexidade.
-
-## 9. Complex e Adaptive — planeados
-
-**Complex (Radix Sort binário):** trabalhar com os índices não negativos; para cada bit, distribuir os nós entre A e B com `pb` e `ra`, recuperar B com `pa` e repetir até processar todos os bits. O(n log n) operações, pois existem O(log n) bits e O(n) operações por passagem. Memória auxiliar O(1), além das stacks. Ainda não implementado.
-
-**Disorder:** obrigatório antes de qualquer movimento. Contar pares invertidos (valor maior antes de menor) e dividir pelo número total de pares. Para menos de dois elementos, devolver zero, evitando divisão por zero.
-
-| Disorder | Regime Adaptive | Método planeado |
-|---|---|---|
-| < 0.2 | O(n²) | Simple ou adaptação para baixa desordem |
-| 0.2 ≤ d < 0.5 | O(n√n) | Medium |
-| ≥ 0.5 | O(n log n) | Complex |
-
-Os limiares são definidos pelo enunciado. Falta implementar a seleção, justificar as técnicas escolhidas para cada regime e medir o desempenho. Adaptive será a estratégia por defeito.
-
-## 10. Main e integração
-
-O main atual inicializa A/B, executa `parse_args()`, termina sem operações se A estiver ordenada, seleciona `sort_two/three/four/five` para tamanhos pequenos e `sort_simple()` para tamanhos superiores a cinco, e liberta ambas as stacks.
-
-Ainda falta integrar os seletores de estratégia, medir disorder antes dos movimentos e garantir que cada seletor funciona independentemente do tamanho ou desordem. A indexação deve ocorrer antes das estratégias que dela necessitam. Rever a divisão do main em helpers para a Norminette após a implementação funcional.
+- **Complex (`sort_complex.c` — $O(n \log n)$):** implementar *Radix Sort* binário sobre os índices (`0` a `n - 1`), processando bit a bit com `pb`/`ra` e recuperando B com `pa`.
+- **Disorder (`compute_disorder`):** calcular antes de qualquer movimento a proporção de pares invertidos em A ($\text{inversões} / \text{total de pares}$, retornando `0.0` se `size < 2`).
+- **Adaptive (`STRAT_ADAPTIVE`):** despachar conforme o *disorder*:
+  - `< 0.2`: estratégia de baixa desordem / $O(n^2)$
+  - $0.2 \le d < 0.5$: Medium ($O(n\sqrt{n})$)
+  - $\ge 0.5$: Complex ($O(n \log n)$)
+- **Benchmark (`--bench`):** registar a contagem individual das 11 operações e, quando `config.bench == 1`, imprimir no `stderr` a percentagem de *disorder* (2 casas decimais), a estratégia utilizada, o total de operações e o detalhe de cada instrução.
 
 ## Instructions — Compilação e execução
 
@@ -283,70 +186,42 @@ make
 ./push_swap 42 -15 800 0 7
 ./push_swap "5 4 3 2 1"
 ./push_swap 1 2 3 4 5
-make re
-```
-
-A última entrada ordenada não deve emitir operações. Sem argumentos, o programa também deve permanecer silencioso. Erros devem emitir `Error\n` em stderr. O stdout final deve conter exclusivamente operações, uma por linha.
-
-Quando as flags estiverem implementadas:
-
-```sh
 ./push_swap --simple 5 4 3 2 1
 ./push_swap --medium 42 -15 800 0 7
 ./push_swap --complex 42 -15 800 0 7
 ./push_swap --adaptive --bench 42 -15 800 0 7
 ```
 
-Estes últimos comandos são exemplos futuros, não funcionalidades disponíveis atualmente.
+- Entradas vazias, apenas com flags ou já ordenadas terminam com status `0` sem emitir operações.
+- Flags desconhecidas (ex.: `--invalida`) ou argumentos inválidos/duplicados emitem `Error\n` no `stderr` e terminam com status `1`.
 
-## 11. Testes e desempenho
+## 8. Testes já realizados
 
-Testes manuais já realizados: operações individuais, parsing de argumentos separados e agrupados, negativos, duplicados, valores fora do intervalo, ausência de argumentos, ordenação pequena, Simple com entradas de 6 e 10 elementos e indexação com cinco valores. Não equivalem a uma validação exaustiva.
+- **Flags e casos de borda:** `./push_swap`, `./push_swap --bench`, `./push_swap --simple --bench`, entradas já ordenadas, `--simple`, `--medium --bench`, `--bench --medium`, `--complex`, `--adaptive` e flags inválidas (`--invalida` retornando `Error` e status `1`).
+- **Corretude (`./checker_linux`):** `OK` em todas as baterias de 100 e 500 números no Medium e nos testes do Simple e casos pequenos.
+- **Memória (`valgrind --leak-check=full`):** `24 allocs, 24 frees`, `0 bytes in 0 blocks` e `0 errors`.
 
-Metas do enunciado (número de operações):
+## 9. Checklist até à entrega
 
-| Entrada aleatória | Mínimo para passar | Bom | Excelente |
-|---:|---:|---:|---:|
-| 100 | < 2000 | < 1500 | < 700 |
-| 500 | < 12000 | < 8000 | < 5500 |
+- [x] Implementar e validar Medium (`sort_medium.c`, `chunk_utils.c`) com 100 e 500 números.
+- [x] Implementar parsing de flags (`--simple`, `--medium`, `--complex`, `--adaptive`, `--bench`) em `parse_flags.c`.
+- [ ] Implementar Complex ($O(n \log n)$) e demonstrar operações para 100 e 500 números.
+- [ ] Implementar `compute_disorder()` e seleção automática no modo Adaptive.
+- [ ] Implementar saída completa do `--bench` no `stderr` (percentagem de disorder, estratégia, total e contagem das 11 operações).
+- [ ] Rever operações duplas (`ss`, `rr`, `rrr`) e casos sem efeito.
+- [ ] Executar `norminette` em todos os `.c` e `.h` (remover comentários `//`, ajustar espaçamento e cabeçalhos).
+- [ ] Limpar ficheiros temporários (`checker_linux`, `main_jeanlezy.c` $\rightarrow$ `main.c`, protótipos não utilizados) e confirmar `Makefile` sem relink.
+- [ ] Revisão final da documentação e defesa da dupla.
 
-```sh
-ARG=$(shuf -i 0-9999 -n 100)
-./push_swap $ARG | wc -l
-# Quando o checker fornecido estiver disponível:
-./push_swap $ARG | ./checker_linux $ARG
-```
+## 10. Contribuições da dupla
 
-Falta testar múltiplas entradas aleatórias, todas as permutações pequenas, extremos INT_MIN/INT_MAX, erros, invariantes dos ponteiros, leaks e comportamento de cada estratégia. A contagem de operações não comprova por si só que a ordenação está correta.
-
-## 12. Checklist até à entrega
-
-- [ ] Concluir Medium e demonstrar O(n√n) operações.
-- [ ] Implementar Complex e demonstrar O(n log n) operações.
-- [ ] Implementar `compute_disorder()` e Adaptive.
-- [ ] Implementar `--simple`, `--medium`, `--complex`, `--adaptive` (default).
-- [ ] Implementar `--bench`: disorder em percentagem com duas casas decimais, estratégia/classe, total e contagem das 11 operações; saída apenas em stderr quando solicitado.
-- [ ] Rever operações duplas e casos sem efeito.
-- [ ] Confirmar limites de desempenho para 100 e 500 números.
-- [ ] Testar memória, ponteiros e erros de alocação.
-- [ ] Executar Norminette, rever tamanho do main, comentários e Makefile sem relink.
-- [ ] Remover código de diagnóstico e ficheiros de teste desnecessários da entrega.
-- [ ] Rever README final, justificar algoritmos e confirmar contribuições dos dois membros.
-- [ ] Opcional: implementar checker próprio após validar a parte obrigatória.
-
-## 13. Contribuições da dupla
-
-Registo preliminar, baseado no histórico e nos cabeçalhos dos ficheiros partilhados; ambos devem confirmar e completar antes da entrega.
-
-- **jeanbarr:** modularização do parsing, integração inicial do main, criação inicial de `is_sorted()` e trabalho de base na gestão das stacks.
-- **fercarva:** desenvolvimento e testes das operações, ordenação pequena, helpers de mínimo, Simple, indexação e preparação do Medium.
-- **Ambos:** revisão cruzada, integração, testes, decisões de algoritmos e preparação da defesa. Cada membro deve conseguir explicar todas as partes do projeto.
+- **jeanbarr:** modularização do parsing (`parse_args.c`, `parse_flags.c`), estruturas de configuração (`t_config`), integração do `main`, desenvolvimento e validação do Medium (`chunk_utils.c`, `sort_medium.c`), `Makefile` e bateria de testes.
+- **fercarva:** desenvolvimento das operações, ordenação de stacks pequenas (`sort_small.c`), utilitários (`sort_utils.c`), Simple (`sort_simple.c`), indexação (`indexing.c`) e base inicial do Medium.
+- **Ambos:** revisão cruzada, integração, testes com `checker_linux` e `valgrind`, e preparação da defesa.
 
 ## Resources — Referências e utilização de IA
 
-- Enunciado oficial Push_swap, versão 1.2, especialmente §VI.3, §VI.5, §VI.6 e capítulo VII.
+- Enunciado oficial *Push_swap*, versão 1.2 (§VI.3, §VI.5, §VI.6 e capítulo VII).
 - Manual de C e páginas locais `man 3 malloc`, `man 3 free`, `man 2 write`.
-- Thomas H. Cormen et al., *Introduction to Algorithms* — referência para análise de complexidade e algoritmos de ordenação (consulta recomendada).
-- ChatGPT: utilizado para discutir algoritmos, orientar a implementação incremental, rever lógica, simular exemplos, sugerir testes, propor a versão final de `ft_sqrt()` e atualizar a documentação. Os membros devem compreender, rever e testar as sugestões antes de as integrar.
-
-**Próximo objetivo da dupla:** terminar o Chunk Sort, garantindo correção e complexidade no modelo de operações do Push_swap, antes de avançar para Radix e Adaptive.
+- Thomas H. Cormen et al., *Introduction to Algorithms* — referência para análise de complexidade e algoritmos de ordenação.
+- Assistentes de IA (ChatGPT / Gemini): utilizados para discutir algoritmos, estruturar a modularização do parsing e do Chunk Sort, depurar assinaturas/compilação, gerar scripts de teste e atualizar a documentação do projeto.
