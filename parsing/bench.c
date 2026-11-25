@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/25 13:04:52 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/25 13:52:45 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 14:22:51 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,17 @@ static void	put_pct_err(double disorder)
 	write(2, "%\n", 2);
 }
 
-static void	put_strat_err(t_strategy used_strat)
+static void	put_strat_err(t_config *cfg, t_strategy used_strat)
 {
+	put_str_err("Strategy: ");
+	if (cfg->strategy == STRAT_ADAPTIVE)
+		put_str_err("Adaptive -> ");
 	if (used_strat == STRAT_SIMPLE)
-		put_str_err("Strategy: Simple / O(n^2)\n");
+		put_str_err("Simple / O(n^2)\n");
 	else if (used_strat == STRAT_MEDIUM)
-		put_str_err("Strategy: Medium / O(n^(1/2))\n");
+		put_str_err("Medium / O(n^(1/2))\n");
 	else
-		put_str_err("Strategy: Complex / O(n log n)\n");
+		put_str_err("Complex / O(n log n)\n");
 }
 
 static void	put_ops_err(t_ops *ops)
@@ -83,6 +86,6 @@ void	print_bench(t_config *cfg, t_strategy used_strat, double disorder)
 		return ;
 	put_str_err("Disorder: ");
 	put_pct_err(disorder);
-	put_strat_err(used_strat);
+	put_strat_err(cfg, used_strat);
 	put_ops_err(get_ops_stats());
 }

@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/22 20:46:02 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/25 13:43:13 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 14:20:13 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	init_stack(t_stack *stack)
 	stack->size = 0;
 }
 
-static void	dispatch_sort(t_stack *a, t_stack *b, t_config *config)
+static void	dispatch_sort(t_stack *a, t_stack *b, t_strategy used_strat)
 {
 	if (a->size == 2)
 		sort_two(a);
@@ -31,19 +31,25 @@ static void	dispatch_sort(t_stack *a, t_stack *b, t_config *config)
 		sort_four(a, b);
 	else if (a->size == 5)
 		sort_five(a, b);
-	else if (config->strategy == STRAT_SIMPLE)
+	else if (used_strat == STRAT_SIMPLE)
 		sort_simple(a, b);
-	else if (config->strategy == STRAT_MEDIUM)
+	else if (used_strat == STRAT_MEDIUM)
 		sort_medium(a, b);
-	else if (config->strategy == STRAT_COMPLEX)
+	else
 		sort_complex(a, b);
 }
-
+static t_strategy	resolve_strategy(t_config *config, double disorder)
+{
+	if (config->strategy == STRAT_ADAPTIVE)
+		return (choose_adaptive(disorder));
+	return (config->strategy);
+}
 int	main(int argc, char **argv)
 {
 	t_stack		a;
 	t_stack		b;
 	t_config	config;
+	t_strategy	used_strat;
 	double		disorder;
 
 	if (argc == 1)
@@ -56,13 +62,11 @@ int	main(int argc, char **argv)
 	if (parse_args(argc - config.arg_start,
 			argv + config.arg_start, &a, &b))
 		return (1);
-	if (config.strategy == STRAT_ADAPTIVE)
-	{
-		disorder = compute_disorder(&a);
-		config.strategy = choose_adaptive(disorder);
-	}
+	disorder = compute_disorder(&a);
+	used_strat = resolve_strategy(&config, disorder);
 	if (!is_sorted(&a))
-		dispatch_sort(&a, &b, &config);
+		dispatch_sort(&a, &b, used_strat);
+	print_bench(&config, used_strat, disorder);
 	free_stack(&a);
 	free_stack(&b);
 	return (0);
