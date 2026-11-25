@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:32:06 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/24 11:02:15 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 13:21:36 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	sa(t_stack *a)
 	if (!a || a->size < 2)
 		return ;
 	swap(a);
+	record_op(&get_ops_stats()->sa);
 	write(1, "sa\n", 3);
 }
 
@@ -46,6 +47,7 @@ void	sb(t_stack *b)
 {
 	if (!b || b->size < 2)
 		return ;
+	record_op(&get_ops_stats()->sb);
 	swap(b);
 	write(1, "sb\n", 3);
 }
@@ -66,5 +68,8 @@ void	ss(t_stack *a, t_stack *b)
 		did_swap = 1;
 	}
 	if (did_swap)
+	{
+		record_op(&get_ops_stats()->ss);
 		write(1, "ss\n", 3);
+	}
 }

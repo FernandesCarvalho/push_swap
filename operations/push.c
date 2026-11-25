@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:00:13 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/22 17:36:52 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 13:22:35 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	pa(t_stack *a, t_stack *b)
 	if (!a || !b || !b->head)
 		return ;
 	push(a, b);
+	record_op(&get_ops_stats()->pa);
 	write(1, "pa\n", 3);
 }
 
@@ -53,5 +54,6 @@ void	pb(t_stack *a, t_stack *b)
 	if (!a || !b || !a->head)
 		return ;
 	push(b, a);
+	record_op(&get_ops_stats()->pb);
 	write(1, "pb\n", 3);
 }

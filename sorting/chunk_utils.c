@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 11:57:20 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/24 17:23:28 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 13:40:32 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,19 @@ void	push_max_to_a(t_stack *a, t_stack *b)
 	pa(a, b);
 }
 
-void	push_chunk_node(t_stack *a, t_stack *b, int *pushed, t_chunk *chunk)
+void	push_chunk_node(t_stack *a, t_stack *b, int *pshed, t_chunk *chnk)
 {
 	int	index;
 
-	if (!a || !a->head || !b || !chunk)
+	if (!a || !a->head || !b || !chnk)
 		return ;
 	index = a->head->index;
-	if (index >= chunk->start && index < chunk->end)
+	if (index >= chnk->start && index < chnk->end)
 	{
 		pb(a, b);
-		if (index < chunk->mid)
+		if (index < chnk->mid)
 			rb(b);
-		(*pushed)++;
+		(*pshed)++;
 	}
 	else
 		ra(a);

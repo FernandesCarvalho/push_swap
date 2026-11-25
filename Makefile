@@ -6,7 +6,7 @@
 #    By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/21 17:33:56 by jeanbarr          #+#    #+#              #
-#    Updated: 2026/11/25 10:01:51 by jeanbarr         ###   ########.fr        #
+#    Updated: 2026/11/25 13:25:17 by jeanbarr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,13 +17,15 @@ RM 		= rm -f
 
 INCLUDES = -I.
 
-SRCS	= main_jeanlezy.c \
+SRCS	= main.c \
 			stack/new_node_and_back.c \
 			stack/free_stack.c \
+			parsing/bench.c \
 			parsing/convert_numbers.c \
 			parsing/error_exit.c \
 			parsing/ft_split.c \
 			parsing/mini_libft.c \
+			parsing/ops_stats.c \
 			parsing/has_duplicate.c \
 			parsing/parse_args.c \
 			parsing/parse_flags.c \
@@ -31,6 +33,8 @@ SRCS	= main_jeanlezy.c \
 			operations/rotate.c \
 			operations/reverse_rotate.c \
 			operations/swap.c \
+			sorting/choose_adaptive.c \
+			sorting/compute_disorder.c \
 			sorting/chunk_utils.c \
 			sorting/indexing.c \
 			sorting/sort_complex_utils.c \
@@ -38,7 +42,7 @@ SRCS	= main_jeanlezy.c \
 			sorting/sort_medium.c \
 			sorting/sort_simple.c \
 			sorting/sort_small.c \
-			sorting/sort_utils.c \
+			sorting/sort_utils.c 
 	
 OBJS	= $(SRCS:.c=.o)
 

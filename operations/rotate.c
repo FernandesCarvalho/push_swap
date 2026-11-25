@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:20:58 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/24 11:01:36 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 13:50:59 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	ra(t_stack *a)
 	if (!a || a->size < 2)
 		return ;
 	rotate(a);
+	record_op(&get_ops_stats()->ra);
 	write(1, "ra\n", 3);
 }
 
@@ -40,6 +41,7 @@ void	rb(t_stack *b)
 	if (!b || b->size < 2)
 		return ;
 	rotate(b);
+	record_op(&get_ops_stats()->rb);
 	write(1, "rb\n", 3);
 }
 
@@ -59,5 +61,8 @@ void	rr(t_stack *a, t_stack *b)
 		did_rotate = 1;
 	}
 	if (did_rotate)
+	{
+		record_op(&get_ops_stats()->rr);
 		write(1, "rr\n", 3);
+	}
 }

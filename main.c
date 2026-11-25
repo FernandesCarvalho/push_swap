@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_jeanlezy.c                                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/22 20:46:02 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/24 18:13:36 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 13:43:13 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ static void	dispatch_sort(t_stack *a, t_stack *b, t_config *config)
 	else if (config->strategy == STRAT_MEDIUM)
 		sort_medium(a, b);
 	else if (config->strategy == STRAT_COMPLEX)
-		sort_medium(a, b);
-	else
-		sort_medium(a, b);
+		sort_complex(a, b);
 }
 
 int	main(int argc, char **argv)
@@ -46,6 +44,7 @@ int	main(int argc, char **argv)
 	t_stack		a;
 	t_stack		b;
 	t_config	config;
+	double		disorder;
 
 	if (argc == 1)
 		return (0);
@@ -54,8 +53,14 @@ int	main(int argc, char **argv)
 		return (0);
 	init_stack(&a);
 	init_stack(&b);
-	if (parse_args(argc, argv, &a, &b, config.arg_start))
+	if (parse_args(argc - config.arg_start,
+			argv + config.arg_start, &a, &b))
 		return (1);
+	if (config.strategy == STRAT_ADAPTIVE)
+	{
+		disorder = compute_disorder(&a);
+		config.strategy = choose_adaptive(disorder);
+	}
 	if (!is_sorted(&a))
 		dispatch_sort(&a, &b, &config);
 	free_stack(&a);

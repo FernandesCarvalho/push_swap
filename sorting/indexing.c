@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   indexing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 00:13:48 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/24 00:45:37 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/25 12:38:44 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 //FUNÇÃO QUE VERIFICA NÓ POR NÓ, ASSINALANDO ONDE SEVERIA SER A SUA
 //POSIÇÃO, VERIFICANDO DA MENOR PARA A MAIOR PASSANDO DEU INDEX PARA 
 // O T_NODE->INDEX;
+// técnica chamada coordinate compression
+// A função compara cada número com todos os outros e atribui a sua 
+// posição na ordem crescente:
 void	assign_index(t_stack *a)
 {
 	int		index;
