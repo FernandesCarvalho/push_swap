@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sort_medium.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 00:50:44 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/24 12:26:26 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 08:30:49 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // e movimenta esses grupos estrategicamente entre A e B.
 void	sort_medium(t_stack *a, t_stack *b)
 {
-	int	chunk_size;
+	//int	chunk_size;
 	
 	if (!a || !b || is_sorted(a))
 	{

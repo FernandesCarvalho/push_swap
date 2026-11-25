@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/24 13:11:58 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 08:39:23 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <stdio.h>
-# include "libft.h"
+# include "libft/libft.h"
 
 typedef struct s_node
 {
@@ -105,9 +105,18 @@ int		find_max_pos(t_stack *b);
 void	sort_simple(t_stack *a, t_stack *b);
 
 //                  #MEDIUM
+
 void	push_max_to_a(t_stack *a, t_stack *b); //
 void	push_chunks_to_b(); //
 void	push_back_to_a(); //
+
+//                  #COMPLEX
+
+int	get_pivot(t_stack *stack, int size);
+int	partition_a(t_stack *a, t_stack *b, int size, int pivot);
+int	partition_b(t_stack *a, t_stack *b, int size, int pivot);
+void	sort_complex(t_stack *a, t_stack *b);
+
 //                  #SMALL
 
 void	sort_two(t_stack *a);

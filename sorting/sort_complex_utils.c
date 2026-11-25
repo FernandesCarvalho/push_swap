@@ -6,11 +6,17 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 15:09:50 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/24 17:54:50 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/25 08:41:37 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
+
+static int	rotation_to_a(t_stack *a, t_stack *b, int size, int pivot);
+static int	rotation_to_b(t_stack *a, t_stack *b, int size, int pivot);
+int	partition_b(t_stack *a, t_stack *b, int size, int pivot);
+int	partition_a(t_stack *a, t_stack *b, int size, int pivot);
+int	get_pivot(t_stack *stack, int size);
 
 int	get_pivot(t_stack *stack, int size)
 {
