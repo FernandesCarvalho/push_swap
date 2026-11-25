@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/24 18:34:43 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 09:52:18 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <stdio.h>
-# include "libft.h"
 
 typedef struct s_node
 {
@@ -90,7 +89,13 @@ void	rrr(t_stack *a, t_stack *b);
 
 //                             ****     PARSING     ****
 
-int		validate_number(char *str);
+int		ft_isdigit(int c);
+size_t	ft_strlen(const char *s);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+char	**ft_split(char const *s, char c);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strdup(const char *s);
+
 int		has_duplicate(t_stack *a, int value);
 int		convert_numbers(char *str, int *result);
 int		error_exit(t_stack *a, t_stack *b, char **split);
@@ -137,6 +142,14 @@ void	push_max_to_a(t_stack *a, t_stack *b);//
 void	push_chunk_node(t_stack *a, t_stack *b, int *pushed, t_chunk *chunk);//
 void	push_chunks_to_b(t_stack *a, t_stack *b);//
 void	push_back_to_a(t_stack *a, t_stack *b);//
+
+//                  #COMPLEX
+
+int		get_pivot(t_stack *stack, int size);
+int		partition_a(t_stack *a, t_stack *b, int size, int pivot);
+int		partition_b(t_stack *a, t_stack *b, int size, int pivot);
+void	sort_complex(t_stack *a, t_stack *b);
+
 
 //                  #SMALL
 

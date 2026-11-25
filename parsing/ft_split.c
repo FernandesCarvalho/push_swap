@@ -6,11 +6,11 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/05 18:38:48 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/08 17:50:53 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 09:49:10 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../push_swap.h"
 
 static void	free_all(char **arr, int n)
 {
