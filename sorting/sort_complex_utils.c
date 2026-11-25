@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 15:09:50 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/25 08:41:37 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/25 13:37:16 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	get_pivot(t_stack *stack, int size)
 	int		i;
 
 	if (!stack || size <= 0 || size > stack->size)
-		return (0);
+		return (0); 
 	i = size;
 	current = stack->head;
 	min_index = current->index;
@@ -42,9 +42,11 @@ int	get_pivot(t_stack *stack, int size)
 static int	rotation_to_a(t_stack *a, t_stack *b, int size, int pivot)
 {
 	int	quant;
+	int	rotation;
 
 	quant = 0;
-	while (size > 0)
+	rotation = 0;
+	while (quant < size / 2)
 	{
 		if (a->head->index < pivot)
 		{
@@ -52,10 +54,12 @@ static int	rotation_to_a(t_stack *a, t_stack *b, int size, int pivot)
 			quant++;
 		}
 		else
+		{
 			ra(a);
-		size--;
+			rotation++;
+		}
 	}
-	return (quant);
+	return (rotation);
 }
 
 int	partition_a(t_stack *a, t_stack *b, int size, int pivot)
@@ -67,20 +71,24 @@ int	partition_a(t_stack *a, t_stack *b, int size, int pivot)
 	if (!a || !b || size <= 0 || size > a->size)
 		return (0);
 	full_stack = (size == a->size);
-	quant = rotation_to_a(a, b, size, pivot);
-	rotation = size - quant;
+	quant = size / 2;
+	rotation = rotation_to_a(a, b, size, pivot);
 	if (!full_stack)
+	{
 		while (rotation-- > 0)
 			rra(a);
+	}
 	return (quant);
 }
 
 static int	rotation_to_b(t_stack *a, t_stack *b, int size, int pivot)
 {
 	int	quant;
+	int	rotation;
 
 	quant = 0;
-	while (size > 0)
+	rotation = 0;
+	while (quant < size - size / 2)
 	{
 		if (b->head->index >= pivot)
 		{
@@ -88,10 +96,12 @@ static int	rotation_to_b(t_stack *a, t_stack *b, int size, int pivot)
 			quant++;
 		}
 		else
+		{
 			rb(b);
-		size--;
+			rotation++;
+		}
 	}
-	return (quant);
+	return (rotation);
 }
 
 int	partition_b(t_stack *a, t_stack *b, int size, int pivot)
@@ -103,11 +113,13 @@ int	partition_b(t_stack *a, t_stack *b, int size, int pivot)
 	if (!a || !b || size <= 0 || size > b->size)
 		return (0);
 	full_stack = (size == b->size);
-	quant = rotation_to_b(a, b, size, pivot);
-	rotation = size - quant;
+	quant = size - size / 2;
+	rotation = rotation_to_b(a, b, size, pivot);
 
 	if (!full_stack)
+	{
 		while (rotation-- > 0)
 			rrb(b);
+	}
 	return (quant);
 }

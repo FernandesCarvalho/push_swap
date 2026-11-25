@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_jeanlezy.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/22 20:46:02 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/24 18:13:36 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 10:50:45 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	dispatch_sort(t_stack *a, t_stack *b, t_config *config)
 	else if (config->strategy == STRAT_MEDIUM)
 		sort_medium(a, b);
 	else if (config->strategy == STRAT_COMPLEX)
-		sort_medium(a, b);
+		sort_complex(a, b);
 	else
 		sort_medium(a, b);
 }
@@ -58,6 +58,12 @@ int	main(int argc, char **argv)
 		return (1);
 	if (!is_sorted(&a))
 		dispatch_sort(&a, &b, &config);
+		
+	if (is_sorted(&a) && b.size == 0)
+		write(2, "OK\n", 3);
+	else
+		write(2, "KO\n", 3);
+
 	free_stack(&a);
 	free_stack(&b);
 	return (0);

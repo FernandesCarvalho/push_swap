@@ -3,13 +3,13 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+         #
+#    By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/21 17:33:56 by jeanbarr          #+#    #+#              #
-#    Updated: 2026/11/25 10:01:51 by jeanbarr         ###   ########.fr        #
-#    Updated: 2026/11/25 08:42:11 by fercarva         ###   ########.fr        #
+#    Updated: 2026/11/25 12:43:42 by fercarva         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 NAME	= push_swap
 CC 		= cc
@@ -35,6 +35,7 @@ SRCS	= main_jeanlezy.c \
 			sorting/chunk_utils.c \
 			sorting/indexing.c \
 			sorting/sort_complex_utils.c \
+			sorting/sort_complex_group.c \
 			sorting/sort_complex.c \
 			sorting/sort_medium.c \
 			sorting/sort_simple.c \

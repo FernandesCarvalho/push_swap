@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/25 09:52:18 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 12:47:52 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,11 +121,9 @@ void	free_stack(t_stack *stack);
 //                             ****     SORTING     ****
 
 //                  #INDEXING
-
 void	assign_index(t_stack *a);
 
 //                  #UTILS
-
 int		is_sorted(t_stack *stack);//
 int		find_min_pos(t_stack *a); //
 int		ft_sqrt(int n);
@@ -133,7 +131,6 @@ void	push_min_to_b(t_stack *a, t_stack *b); //
 int		find_max_pos(t_stack *b); //
 
 //                  #SIMPLE
-
 void	sort_simple(t_stack *a, t_stack *b);
 
 //                  #MEDIUM
@@ -144,15 +141,16 @@ void	push_chunks_to_b(t_stack *a, t_stack *b);//
 void	push_back_to_a(t_stack *a, t_stack *b);//
 
 //                  #COMPLEX
-
 int		get_pivot(t_stack *stack, int size);
 int		partition_a(t_stack *a, t_stack *b, int size, int pivot);
+int		is_group_sorted(t_stack *stack, int size);
 int		partition_b(t_stack *a, t_stack *b, int size, int pivot);
 void	sort_complex(t_stack *a, t_stack *b);
+void	sort_three_group(t_stack *a);
+void	sort_three_group_b(t_stack *a, t_stack *b);
 
 
 //                  #SMALL
-
 void	sort_two(t_stack *a);
 void	sort_three(t_stack *a);
 void	sort_four(t_stack *a, t_stack *b);
