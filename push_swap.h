@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/26 13:02:06 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 14:58:17 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_chunk
 	int	mid;
 }	t_chunk;
 
-typedef enum e_strategy // Guarda a estratégia escolhida
+typedef enum e_strategy
 {
 	STRAT_ADAPTIVE,
 	STRAT_SIMPLE,
@@ -50,8 +50,8 @@ typedef enum e_strategy // Guarda a estratégia escolhida
 typedef struct s_config
 {
 	t_strategy	strategy;
-	int			bench; //Indica se o benchmark está ativo
-	int			arg_start; //Indica onde começam os números em argv
+	int			bench;
+	int			arg_start;
 }	t_config;
 
 typedef struct s_ops //
@@ -117,10 +117,10 @@ int			error_exit(t_stack *a, t_stack *b, char **split);
 void		free_split(char **split);
 int			parse_args(int argc, char **argv, t_stack *a, t_stack *b);
 
-void		parse_flags(int argc, char **argv, t_config *config); //
-int			set_strategy(t_config *config, char *arg);//
-int			set_bench(t_config *config, char *arg); //
-void		init_config(t_config *config); //
+void		parse_flags(int argc, char **argv, t_config *config);
+int			set_strategy(t_config *config, char *arg);
+int			set_bench(t_config *config, char *arg);
+void		init_config(t_config *config);
 
 double		compute_disorder(t_stack *a);
 t_strategy	choose_adaptive(double disorder);

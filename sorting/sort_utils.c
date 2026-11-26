@@ -6,13 +6,12 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/22 20:35:37 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/24 11:50:16 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 14:59:23 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-// Estão em ordem crescente do topo (head) até o fundo (tail)
 int	is_sorted(t_stack *stack)
 {
 	t_node	*curr;
@@ -29,7 +28,6 @@ int	is_sorted(t_stack *stack)
 	return (1);
 }
 
-//ENCONTRA O MENOR VALOR NO MEIO DOS NÓS E RETORNA O SEU INDEX DE POSIÇÃO
 int	find_min_pos(t_stack *a)
 {
 	int		pos;
@@ -56,8 +54,6 @@ int	find_min_pos(t_stack *a)
 	return (pos);
 }
 
-//MOVE O NÓ COM O VALOR MENOR PARA O TOPO, E MANDA PARA
-//A STACK "B" COM O pb().
 void	push_min_to_b(t_stack *a, t_stack *b)
 {
 	int	pos;
@@ -78,9 +74,6 @@ void	push_min_to_b(t_stack *a, t_stack *b)
 	pb(a, b);
 }
 
-//FUNÇÃO QUE FAZ A RAIZ QUADRADA DO NUMERO DE ELEMENTOS QUE RECEBE,
-//PARA SABER QUANTOS CHUNKS VAMOS USAR NO MEDIU (CHUNK SORT) E DETERMINAR
-//O TAMANHO DOS GRUPOS DE ELEMENTOS EM QUE VAMOS DIIDIR A STACK
 int	ft_sqrt(int n)
 {
 	int	i;
