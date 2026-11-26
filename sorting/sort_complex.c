@@ -6,15 +6,23 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 17:57:31 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/25 14:09:43 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 12:48:48 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-void	sort_complex(t_stack *a, t_stack *b);
+void		sort_complex(t_stack *a, t_stack *b);
 static void	sort_b(t_stack *a, t_stack *b, int size);
 static void	sort_a(t_stack *a, t_stack *b, int size);
+
+void	sort_complex(t_stack *a, t_stack *b)
+{
+	if (!a || !b || !a->head)
+		return ;
+	assign_index(a);
+	sort_a(a, b, a->size);
+}
 
 static void	sort_a(t_stack *a, t_stack *b, int size)
 {
@@ -27,6 +35,13 @@ static void	sort_a(t_stack *a, t_stack *b, int size)
 	{
 		if (a->head->index > a->head->next->index)
 			sa(a);
+		return ;
+	}
+	if (is_group_sorted(a, size))
+		return ;
+	if (size == 3)
+	{
+		sort_three_group(a);
 		return ;
 	}
 	pivot = get_pivot(a, size);
@@ -55,16 +70,13 @@ static void	sort_b(t_stack *a, t_stack *b, int size)
 		pa(a, b);
 		return ;
 	}
+	if (size == 3)
+	{
+		sort_three_group_b(a, b);
+		return ;
+	}
 	pivot = get_pivot(b, size);
 	pushed = partition_b(a, b, size, pivot);
 	sort_a(a, b, pushed);
 	sort_b(a, b, size - pushed);
-}
-
-void	sort_complex(t_stack *a, t_stack *b)
-{
-	if (!a || !b || !a->head)
-		return ;
-	assign_index(a);
-	sort_a(a, b, a->size);
 }

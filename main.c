@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/22 20:46:02 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/25 15:02:38 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 12:48:36 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ static void	dispatch_sort(t_stack *a, t_stack *b, t_strategy used_strat)
 		sort_five(a, b);
 	else if (used_strat == STRAT_SIMPLE)
 		sort_simple(a, b);
-	else if (used_strat == STRAT_MEDIUM)
+	else if (config->strategy == STRAT_MEDIUM)
+		sort_medium(a, b);
+	else if (config->strategy == STRAT_COMPLEX)
 		sort_medium(a, b);
 	else
 		sort_complex(a, b);
@@ -67,8 +69,7 @@ int	main(int argc, char **argv)
 	disorder = compute_disorder(&a);
 	used_strat = resolve_strategy(&config, disorder);
 	if (!is_sorted(&a))
-		dispatch_sort(&a, &b, used_strat);
-	print_bench(&config, used_strat, disorder);
+		dispatch_sort(&a, &b, &config);
 	free_stack(&a);
 	free_stack(&b);
 	return (0);

@@ -6,9 +6,10 @@
 #    By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/21 17:33:56 by jeanbarr          #+#    #+#              #
-#    Updated: 2026/11/26 12:32:33 by jeanbarr         ###   ########.fr        #
+#    Updated: 2026/11/26 12:48:00 by jeanbarr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 NAME	= push_swap
 CC 		= cc
@@ -38,6 +39,7 @@ SRCS	= main.c \
 			sorting/chunk_utils.c \
 			sorting/indexing.c \
 			sorting/sort_complex_utils.c \
+			sorting/sort_complex_group.c \
 			sorting/sort_complex.c \
 			sorting/sort_medium.c \
 			sorting/sort_simple.c \
