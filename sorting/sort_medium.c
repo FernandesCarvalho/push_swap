@@ -6,16 +6,15 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 00:50:44 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/26 12:56:09 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 13:58:50 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-static void	rot_b_to_idx(t_stack *b, int idx)
+static int	idx_pos(t_stack *b, int idx)
 {
 	int		pos;
-	int		i;
 	t_node	*curr;
 
 	curr = b->head;
@@ -25,6 +24,15 @@ static void	rot_b_to_idx(t_stack *b, int idx)
 		curr = curr->next;
 		pos++;
 	}
+	return (pos);
+}
+
+static void	rot_b_to_idx(t_stack *b, int idx)
+{
+	int	pos;
+	int	i;
+
+	pos = idx_pos(b, idx);
 	i = 0;
 	if (pos <= b->size / 2)
 		while (i++ < pos)
@@ -39,16 +47,9 @@ static void	rot_b_to_idx(t_stack *b, int idx)
 
 static int	idx_dist(t_stack *b, int idx)
 {
-	int		pos;
-	t_node	*curr;
+	int	pos;
 
-	curr = b->head;
-	pos = 0;
-	while (curr && curr->index != idx)
-	{
-		curr = curr->next;
-		pos++;
-	}
+	pos = idx_pos(b, idx);
 	if (pos <= b->size / 2)
 		return (pos);
 	return (b->size - pos);

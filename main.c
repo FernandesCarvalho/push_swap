@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/22 20:46:02 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/26 13:18:14 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 13:38:32 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	init_stack(t_stack *stack)
 	stack->tail = NULL;
 	stack->size = 0;
 }
+
 static int	sort_tiny(t_stack *a, t_stack *b)
 {
 	if (a->size == 2)
@@ -35,14 +36,11 @@ static int	sort_tiny(t_stack *a, t_stack *b)
 	return (1);
 }
 
-static void	dispatch_sort(t_stack *a, t_stack *b, t_config *config,
-		t_strategy used_strat)
+static void	dispatch_sort(t_stack *a, t_stack *b, t_strategy used_strat)
 {
-	if (config->strategy == STRAT_ADAPTIVE && sort_tiny(a, b))
+	if (sort_tiny(a, b))
 		return ;
-	if (used_strat == STRAT_SIMPLE && config->strategy == STRAT_ADAPTIVE)
-		sort_low_disorder(a, b);
-	else if (used_strat == STRAT_SIMPLE)
+	if (used_strat == STRAT_SIMPLE)
 		sort_simple(a, b);
 	else if (used_strat == STRAT_MEDIUM)
 		sort_medium(a, b);
