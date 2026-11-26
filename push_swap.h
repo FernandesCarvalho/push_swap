@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/26 12:32:45 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 13:02:06 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,6 @@ int			is_sorted(t_stack *stack);//
 int			find_min_pos(t_stack *a); //
 int			ft_sqrt(int n);
 void		push_min_to_b(t_stack *a, t_stack *b); //
-int			find_max_pos(t_stack *b); //
 
 //                  #SIMPLE
 
@@ -160,7 +159,6 @@ void		sort_simple(t_stack *a, t_stack *b);
 
 //                  #MEDIUM
 void		sort_medium(t_stack *a, t_stack *b);//
-void		push_max_to_a(t_stack *a, t_stack *b);//
 void		push_chunk_node(t_stack *a, t_stack *b, int *pshed, t_chunk *chnk);
 void		push_chunks_to_b(t_stack *a, t_stack *b);//
 void		push_back_to_a(t_stack *a, t_stack *b);//
