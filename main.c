@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/22 20:46:02 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/25 14:20:13 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/25 15:02:38 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,14 @@ static void	dispatch_sort(t_stack *a, t_stack *b, t_strategy used_strat)
 	else
 		sort_complex(a, b);
 }
+
 static t_strategy	resolve_strategy(t_config *config, double disorder)
 {
 	if (config->strategy == STRAT_ADAPTIVE)
 		return (choose_adaptive(disorder));
 	return (config->strategy);
 }
+
 int	main(int argc, char **argv)
 {
 	t_stack		a;

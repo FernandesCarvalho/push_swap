@@ -6,7 +6,7 @@
 #    By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/21 17:33:56 by jeanbarr          #+#    #+#              #
-#    Updated: 2026/11/25 13:25:17 by jeanbarr         ###   ########.fr        #
+#    Updated: 2026/11/26 12:32:33 by jeanbarr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ SRCS	= main.c \
 			sorting/sort_medium.c \
 			sorting/sort_simple.c \
 			sorting/sort_small.c \
-			sorting/sort_utils.c 
+			sorting/sort_utils.c
 	
 OBJS	= $(SRCS:.c=.o)
 

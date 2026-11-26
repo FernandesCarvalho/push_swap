@@ -6,59 +6,37 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 11:57:20 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/25 13:40:32 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 12:10:04 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-int	find_max_pos(t_stack *b)
+static int	chunk_rotation(t_stack *a, t_chunk *chnk)
 {
-	int		pos;
-	int		val;
+	t_node	*curr;
 	int		i;
-	t_node	*current;
+	int		first;
+	int		last;
 
-	if (!b || !b->head)
-		return (0);
-	current = b->head;
+	curr = a->head;
 	i = 0;
-	val = current->index;
-	pos = 0;
-	while (current)
+	first = -1;
+	last = -1;
+	while (curr)
 	{
-		if (current->index > val)
+		if (curr->index >= chnk->start && curr->index < chnk->end)
 		{
-			val = current->index;
-			pos = i;
+			if (first == -1)
+				first = i;
+			last = i;
 		}
-		current = current->next;
+		curr = curr->next;
 		i++;
 	}
-	return (pos);
-}
-
-void	push_max_to_a(t_stack *a, t_stack *b)
-{
-	int	pos;
-	int	i;
-
-	i = 0;
-	if (!a || !b || b->size == 0)
-		return ;
-	pos = find_max_pos(b);
-	if (pos <= b->size / 2)
-	{
-		while (i++ < pos)
-			rb(b);
-	}
-	else
-	{
-		i = b->size;
-		while (i-- > pos)
-			rrb(b);
-	}
-	pa(a, b);
+	if (first <= a->size - last)
+		return (first);
+	return (last - a->size);
 }
 
 void	push_chunk_node(t_stack *a, t_stack *b, int *pshed, t_chunk *chnk)
@@ -74,9 +52,12 @@ void	push_chunk_node(t_stack *a, t_stack *b, int *pshed, t_chunk *chnk)
 		if (index < chnk->mid)
 			rb(b);
 		(*pshed)++;
+		return ;
 	}
-	else
+	if (chunk_rotation(a, chnk) >= 0)
 		ra(a);
+	else
+		rra(a);
 }
 
 static void	next_chunk(t_chunk *chunk, int *target, int chunk_size, int total)
@@ -100,7 +81,7 @@ void	push_chunks_to_b(t_stack *a, t_stack *b)
 	if (!a || !b || a->size == 0)
 		return ;
 	total = a->size;
-	chunk_size = ft_sqrt(total);
+	chunk_size = ft_sqrt(total) * 2;
 	pushed = 0;
 	target = chunk_size;
 	chunk.start = 0;

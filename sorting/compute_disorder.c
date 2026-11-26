@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/25 10:27:11 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/25 12:50:17 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 12:14:39 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ double	compute_disorder(t_stack *a)
 	t_node	*next;
 	int		inversions;
 	double	max_inversions;
-	
-	if (!a || a-> size < 2)
+
+	if (!a || a->size < 2)
 		return (0.0);
 	inversions = 0;
 	curr = a->head;
@@ -28,7 +28,7 @@ double	compute_disorder(t_stack *a)
 		next = curr->next;
 		while (next)
 		{
-			if(curr->value > next->value)
+			if (curr->value > next->value)
 				inversions++;
 			next = next->next;
 		}
