@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/25 12:47:52 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/26 18:00:24 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,43 @@
 # include <limits.h>
 # include <stdio.h>
 
+typedef enum e_op // Estrategia para optimizar os movimentos e reduzir operacoes
+{
+	OP_SA,
+	OP_SB,
+	OP_SS,
+	OP_PA,
+	OP_PB,
+	OP_RA,
+	OP_RB,
+	OP_RR,
+	OP_RRA,
+	OP_RRB,
+	OP_RRR
+}	t_op;
+
+typedef struct s_moves 
+{
+	t_op	*ops;
+	int		size;
+	int		capacity;
+} t_moves;
+
 typedef struct s_node
 {
 	int	value;
 	int	index;
 	struct s_node	*prev;
 	struct s_node	*next;
-} t_node;
+}	t_node;
 
 typedef struct s_stack
 {
 	t_node	*head;
 	t_node	*tail;
 	int		size;
-} t_stack;
+	t_moves	*moves;
+}	t_stack;
 
 typedef struct s_chunk
 {
@@ -54,6 +77,8 @@ typedef struct s_config
 	int			bench; //Indica se o benchmark está ativo
 	int			arg_start; //Indica onde começam os números em argv
 }	t_config;
+
+
 //========================================================================================================
 
 //                             ****     OPERATIONS     ****
@@ -149,11 +174,19 @@ void	sort_complex(t_stack *a, t_stack *b);
 void	sort_three_group(t_stack *a);
 void	sort_three_group_b(t_stack *a, t_stack *b);
 
-
 //                  #SMALL
 void	sort_two(t_stack *a);
 void	sort_three(t_stack *a);
 void	sort_four(t_stack *a, t_stack *b);
 void	sort_five(t_stack *a, t_stack *b);
+
+//========================================================================================================
+
+//                             ****     SORTING     ****
+
+int		init_moves(t_moves *moves);
+int		add_move(t_moves *moves, t_op op);
+int		grow_moves(t_moves *moves);
+void	free_moves(t_moves *moves);
 
 #endif

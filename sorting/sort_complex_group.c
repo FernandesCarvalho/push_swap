@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/25 12:37:53 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/25 12:57:34 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/26 13:46:55 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,23 @@ void	sort_three_group_b(t_stack *a, t_stack *b)
 {
 	if (!a || !b || b->size < 3)
 		return ;
+	if (b->head->next->index > b->head->index
+		&& b->head->next->index > b->head->next->next->index)
+		sb(b);
+	if (b->head->index > b->head->next->next->index)
+	{
+		pa(a, b);
+		if (b->head->index < b->head->next->index)
+			sb(b);
+		pa(a, b);
+		pa(a, b);
+		return ;
+	}
+	if (b->head->index < b->head->next->index)
+		sb(b);
 	pa(a, b);
+	sb(b);
 	pa(a, b);
+	sa(a);
 	pa(a, b);
-	sort_three_group(a);
 }
