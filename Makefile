@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+         #
+#    By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/21 17:33:56 by jeanbarr          #+#    #+#              #
-#    Updated: 2026/11/27 11:00:28 by jeanbarr         ###   ########.fr        #
+#    Updated: 2026/11/27 16:30:35 by fercarva         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,17 @@ SRCS	= main.c \
 			sorting/sort_medium.c \
 			sorting/sort_simple.c \
 			sorting/sort_small.c \
-			sorting/sort_utils.c
+			sorting/sort_utils.c \
+			sorting/sort_complex_group.c \
+			optimize/optimize_blocks.c \
+			optimize/optimize_final.c \
+			optimize/optimize_flush.c \
+			optimize/optimize_merge.c \
+			optimize/optimize_merge_ops.c \
+			optimize/optimize_merge_utils.c \
+			optimize/optimize_moves.c \
+			optimize/optimize_normalize.c \
+			optimize/optimize_pairs.c
 	
 OBJS	= $(SRCS:.c=.o)
 

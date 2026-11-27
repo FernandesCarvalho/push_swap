@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/27 11:41:30 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/27 16:27:28 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,51 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
+
+typedef enum e_op
+{
+	OP_SA,
+	OP_SB,
+	OP_SS,
+	OP_PA,
+	OP_PB,
+	OP_RA,
+	OP_RB,
+	OP_RR,
+	OP_RRA,
+	OP_RRB,
+	OP_RRR
+}	t_op;
+
+typedef struct s_block
+{
+	int	read;
+	int	write;
+	int	rot_a;
+	int	rot_b;
+	int	size_a;
+	int	size_b;
+}	t_block;
+
+typedef struct s_moves
+{
+	t_op	*ops;
+	int		size;
+	int		capacity;
+	int		error;
+}	t_moves;
+
+typedef struct s_merge
+{
+	t_moves	a;
+	t_moves	b;
+	t_moves	result;
+	int		read;
+	int		write;
+	int		start;
+	int		size_a;
+	int		size_b;
+}	t_merge;
 
 typedef struct s_node
 {
@@ -30,6 +75,7 @@ typedef struct s_stack
 	t_node	*head;
 	t_node	*tail;
 	int		size;
+	t_moves	*moves;
 }	t_stack;
 
 typedef struct s_chunk
@@ -130,6 +176,7 @@ void		put_str_err(const char *s);
 void		print_bench(t_config *cfg, t_strategy used_strat, double disorder);
 void		put_nbr_err(long n);
 void		record_op(int *op_count);
+void		count_moves(t_moves *moves);
 
 //==============================================================================
 
@@ -168,6 +215,9 @@ int			get_pivot(t_stack *stack, int size);
 int			partition_a(t_stack *a, t_stack *b, int size, int pivot);
 int			partition_b(t_stack *a, t_stack *b, int size, int pivot);
 void		sort_complex(t_stack *a, t_stack *b);
+int			is_group_sorted(t_stack *stack, int size);
+void		sort_three_group(t_stack *a);
+void		sort_three_group_b(t_stack *a, t_stack *b);
 
 //                  #SMALL
 
@@ -175,5 +225,27 @@ void		sort_two(t_stack *a);
 void		sort_three(t_stack *a);
 void		sort_four(t_stack *a, t_stack *b);
 void		sort_five(t_stack *a, t_stack *b);
+
+//==============================================================================
+
+//                             ****     OPTIMIZE     ****
+
+/* OPTIMIZE */
+
+int			init_moves(t_moves *moves);
+int			add_move(t_moves *moves, t_op op);
+int			grow_moves(t_moves *moves);
+void		print_moves(t_moves *moves);
+void		free_moves(t_moves *moves);
+void		optimize_pairs(t_moves *moves);
+void		optimize_blocks(t_moves *moves, int size_a, int size_b);
+void		optimize_moves(t_moves *moves, int initial_size);
+void		optimize_merge(t_moves *moves, int initial_size);
+void		normalize_block(t_block *block);
+void		flush_rotations(t_moves *moves, t_block *block);
+void		split_operation(t_op op, t_moves *a, t_moves *b);
+void		merge_operations(t_moves *a, t_moves *b, t_moves *result);
+void		process_block(t_merge *merge);
+void		write_block(t_moves *moves, t_merge *merge);
 
 #endif

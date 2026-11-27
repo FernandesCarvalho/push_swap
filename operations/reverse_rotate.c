@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reverse_rotate.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:00:44 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/25 13:50:36 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 18:52:01 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ void	rra(t_stack *a)
 	if (!a || a->size < 2)
 		return ;
 	reverse_rotate(a);
-	record_op(&get_ops_stats()->rra);
-	write(1, "rra\n", 4);
+	add_move(a->moves, OP_RRA);
 }
 
 void	rrb(t_stack *b)
@@ -41,8 +40,7 @@ void	rrb(t_stack *b)
 	if (!b || b->size < 2)
 		return ;
 	reverse_rotate(b);
-	record_op(&get_ops_stats()->rrb);
-	write(1, "rrb\n", 4);
+	add_move(b->moves, OP_RRB);
 }
 
 void	rrr(t_stack *a, t_stack *b)
@@ -62,7 +60,9 @@ void	rrr(t_stack *a, t_stack *b)
 	}
 	if (did_rev_rot)
 	{
-		record_op(&get_ops_stats()->rrr);
-		write(1, "rrr\n", 4);
+		if (a)
+			add_move(a->moves, OP_RRR);
+		else
+			add_move(b->moves, OP_RRR);
 	}
 }

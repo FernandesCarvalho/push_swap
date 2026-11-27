@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rotate.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:20:58 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/25 13:50:59 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 18:49:17 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ void	ra(t_stack *a)
 	if (!a || a->size < 2)
 		return ;
 	rotate(a);
-	record_op(&get_ops_stats()->ra);
-	write(1, "ra\n", 3);
+	add_move(a->moves, OP_RA);
 }
 
 void	rb(t_stack *b)
@@ -41,8 +40,7 @@ void	rb(t_stack *b)
 	if (!b || b->size < 2)
 		return ;
 	rotate(b);
-	record_op(&get_ops_stats()->rb);
-	write(1, "rb\n", 3);
+	add_move(b->moves, OP_RB);
 }
 
 void	rr(t_stack *a, t_stack *b)
@@ -62,7 +60,9 @@ void	rr(t_stack *a, t_stack *b)
 	}
 	if (did_rotate)
 	{
-		record_op(&get_ops_stats()->rr);
-		write(1, "rr\n", 3);
+		if (a)
+			add_move(a->moves, OP_RR);
+		else
+			add_move(b->moves, OP_RR);
 	}
 }

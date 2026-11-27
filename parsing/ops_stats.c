@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ops_stats.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/25 13:15:17 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/27 11:40:59 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/27 16:26:12 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,29 @@ void	put_nbr_err(long n)
 		put_nbr_err(n / 10);
 	c = (char)((n % 10) + '0');
 	write(2, &c, 1);
+}
+void	count_moves(t_moves *moves)
+{
+	t_ops	*stats;
+	int		*counts[11];
+	int		i;
+
+	stats = get_ops_stats();
+	counts[OP_SA] = &stats->sa;
+	counts[OP_SB] = &stats->sb;
+	counts[OP_SS] = &stats->ss;
+	counts[OP_PA] = &stats->pa;
+	counts[OP_PB] = &stats->pb;
+	counts[OP_RA] = &stats->ra;
+	counts[OP_RB] = &stats->rb;
+	counts[OP_RR] = &stats->rr;
+	counts[OP_RRA] = &stats->rra;
+	counts[OP_RRB] = &stats->rrb;
+	counts[OP_RRR] = &stats->rrr;
+	i = 0;
+	while (i < moves->size)
+	{
+		record_op(counts[moves->ops[i]]);
+		i++;
+	}
 }
