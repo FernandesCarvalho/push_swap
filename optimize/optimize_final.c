@@ -6,13 +6,11 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/27 03:14:13 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/27 15:10:21 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 15:37:26 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
-
-void	optimize_moves(t_moves *moves, int initial_size);
 
 void	optimize_moves(t_moves *moves, int initial_size)
 {

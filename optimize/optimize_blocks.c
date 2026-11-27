@@ -6,166 +6,76 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/26 14:02:47 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/27 14:26:06 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 15:44:50 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-void		optimize_blocks(t_moves *moves, int size_a, int size_b);
-static int	is_rotation(t_op op);
-static void	count_rotation(t_op op, int *rot_a, int *rot_b);
-static int	normalize_rotation(int rotation, int size);
-static int	rotation_cost(int rot_a, int rot_b);
-static void	normalize_block(int *rot_a, int *rot_b,
-	int size_a, int size_b);
-static void	flush_rotations(t_moves *moves, int *write,
-	int rot_a, int rot_b);
-
-
 static int	is_rotation(t_op op)
 {
 	return (op >= OP_RA && op <= OP_RRR);
 }
-static void	count_rotation(t_op op, int *rot_a, int *rot_b)
+
+static void	count_rotation(t_op op, t_block *block)
 {
 	if (op == OP_RA || op == OP_RR)
-		(*rot_a)++;
+		block->rot_a++;
 	if (op == OP_RB || op == OP_RR)
-		(*rot_b)++;
+		block->rot_b++;
 	if (op == OP_RRA || op == OP_RRR)
-		(*rot_a)--;
+		block->rot_a--;
 	if (op == OP_RRB || op == OP_RRR)
-		(*rot_b)--;
+		block->rot_b--;
 }
 
-static void	flush_rotations(t_moves *moves, int *write,
-	int rot_a, int rot_b)
+static void	init_block(t_block *block, int size_a, int size_b)
 {
-	while (rot_a > 0 && rot_b > 0)
+	block->read = 0;
+	block->write = 0;
+	block->rot_a = 0;
+	block->rot_b = 0;
+	block->size_a = size_a;
+	block->size_b = size_b;
+}
+
+static void	process_operation(t_moves *moves, t_block *block)
+{
+	t_op	op;
+
+	op = moves->ops[block->read];
+	normalize_block(block);
+	flush_rotations(moves, block);
+	if (op == OP_PA)
 	{
-		moves->ops[*write] = OP_RR;
-		(*write)++;
-		rot_a--;
-		rot_b--;
+		block->size_a++;
+		block->size_b--;
 	}
-	while (rot_a < 0 && rot_b < 0)
+	else if (op == OP_PB)
 	{
-		moves->ops[*write] = OP_RRR;
-		(*write)++;
-		rot_a++;
-		rot_b++;
+		block->size_a--;
+		block->size_b++;
 	}
-	while (rot_a > 0)
-	{
-		moves->ops[*write] = OP_RA;
-		(*write)++;
-		rot_a--;
-	}
-	while (rot_b > 0)
-	{
-		moves->ops[*write] = OP_RB;
-		(*write)++;
-		rot_b--;
-	}
-	while (rot_a < 0)
-	{
-		moves->ops[*write] = OP_RRA;
-		(*write)++;
-		rot_a++;
-	}
-	while (rot_b < 0)
-	{
-		moves->ops[*write] = OP_RRB;
-		(*write)++;
-		rot_b++;
-	}	
+	moves->ops[block->write] = op;
+	block->write++;
 }
 
 void	optimize_blocks(t_moves *moves, int size_a, int size_b)
 {
-	int	read;
-	int	write;
-	int	rot_a;
-	int	rot_b;
+	t_block	block;
 
 	if (!moves || !moves->ops || moves->error)
 		return ;
-	read = 0;
-	write = 0;
-	rot_a = 0;
-	rot_b = 0;
-	while (read < moves->size)
+	init_block(&block, size_a, size_b);
+	while (block.read < moves->size)
 	{
-		if (is_rotation(moves->ops[read]))
-			count_rotation(moves->ops[read], &rot_a, &rot_b);
+		if (is_rotation(moves->ops[block.read]))
+			count_rotation(moves->ops[block.read], &block);
 		else
-		{
-			normalize_block(&rot_a, &rot_b, size_a, size_b);
-			flush_rotations(moves, &write, rot_a, rot_b);
-			if (moves->ops[read] == OP_PA)
-			{
-				size_a++;
-				size_b--;
-			}
-			else if (moves->ops[read] == OP_PB)
-			{
-				size_a--;
-				size_b++;
-			}
-			moves->ops[write] = moves->ops[read];
-			write++;
-			rot_a = 0;
-			rot_b = 0;
-		}
-		read++;
+			process_operation(moves, &block);
+		block.read++;
 	}
-	normalize_block(&rot_a, &rot_b, size_a, size_b);
-	flush_rotations(moves, &write, rot_a, rot_b);
-	moves->size = write;
-}
-
-static int	rotation_cost(int rot_a, int rot_b)
-{
-	int	same_sign;
-
-	same_sign = ((rot_a > 0 && rot_b > 0)
-			|| (rot_a < 0 && rot_b < 0));
-	if (rot_a < 0)
-		rot_a = -rot_a;
-	if (rot_b < 0)
-		rot_b = -rot_b;
-	if (same_sign)
-	{
-		if (rot_a > rot_b)
-			return (rot_a);
-		return (rot_b);
-	}
-	return (rot_a + rot_b);
-}
-
-static void	normalize_block(int *rot_a, int *rot_b,
-	int size_a, int size_b)
-{
-	int	new_a;
-	int	new_b;
-
-	new_a = normalize_rotation(*rot_a, size_a);
-	new_b = normalize_rotation(*rot_b, size_b);
-	if (rotation_cost(*rot_a, *rot_b) <= rotation_cost(new_a, new_b))
-		return ;
-	*rot_a = new_a;
-	*rot_b = new_b;
-}
-
-static int	normalize_rotation(int rotation, int size)
-{
-	if (size < 2)
-		return (0);
-	rotation = rotation % size;
-	if (rotation > size / 2)
-		rotation -= size;
-	else if (rotation < -(size / 2))
-		rotation += size;
-	return (rotation);
+	normalize_block(&block);
+	flush_rotations(moves, &block);
+	moves->size = block.write;
 }

@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/26 14:03:18 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/27 03:38:41 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 15:36:22 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,31 @@ static int	can_cancel(t_op first, t_op second);
 static int	can_combine(t_op first, t_op second, t_op *result);
 static void	optimize_last_pair(t_moves *moves, int *write);
 static int	can_simplify(t_op first, t_op second, t_op *result);
-void	optimize_pairs(t_moves *moves);
 
 static int	can_cancel(t_op first, t_op second)
 {
 	if (first >= OP_SA && first <= OP_SS && first == second)
 		return (1);
-	if (first >= OP_RA && first <= OP_RRR 
+	if (first >= OP_RA && first <= OP_RRR
 		&& second >= OP_RA && second <= OP_RRR)
 	{
 		if (first == second - 3 || first == second + 3)
 			return (1);
 	}
-	if ((first == OP_PA && second == OP_PB) ||
-		(first == OP_PB && second == OP_PA))
+	if ((first == OP_PA && second == OP_PB)
+		|| (first == OP_PB && second == OP_PA))
 		return (1);
 	return (0);
 }
 
 static int	can_combine(t_op first, t_op second, t_op *result)
 {
-	if ((first >= OP_SA && first <= OP_SB 
-		&& second >= OP_SA && second <= OP_SB)
+	if ((first >= OP_SA && first <= OP_SB
+			&& second >= OP_SA && second <= OP_SB)
 		|| (first >= OP_RA && first <= OP_RB
-		&& second >= OP_RA && second <= OP_RB)
+			&& second >= OP_RA && second <= OP_RB)
 		|| (first >= OP_RRA && first <= OP_RRB
-		&& second >= OP_RRA && second <= OP_RRB))
+			&& second >= OP_RRA && second <= OP_RRB))
 	{
 		if (first == second + 1)
 		{
@@ -64,12 +63,12 @@ static void	optimize_last_pair(t_moves *moves, int *write)
 	while (*write >= 2)
 	{
 		if (can_cancel(moves->ops[*write - 1],
-			moves->ops[*write - 2]))
+				moves->ops[*write - 2]))
 		{
 			*write -= 2;
 		}
 		else if (can_combine(moves->ops[*write - 1],
-			moves->ops[*write - 2], &result))
+				moves->ops[*write - 2], &result))
 		{
 			moves->ops[*write - 2] = result;
 			(*write)--;

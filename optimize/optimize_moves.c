@@ -6,17 +6,11 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/26 14:03:10 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/27 03:19:43 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 15:31:21 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
-
-int		init_moves(t_moves *moves);
-int		add_move(t_moves *moves, t_op op);
-int		grow_moves(t_moves *moves);
-void	print_moves(t_moves *moves);
-void	free_moves(t_moves *moves);
 
 int	init_moves(t_moves *moves)
 {
@@ -77,22 +71,21 @@ int	grow_moves(t_moves *moves)
 
 void	print_moves(t_moves *moves)
 {
-	int		i;
-	char	*current;
-	char	*op[] = {"sa", "sb", "ss", "pa", "pb", "ra", "rb", "rr", "rra", "rrb", "rrr"};
+	static const char	*op[] = {
+		"sa\n", "sb\n", "ss\n", "pa\n", "pb\n",
+		"ra\n", "rb\n", "rr\n", "rra\n", "rrb\n", "rrr\n"
+	};
+	int					i;
 
 	if (!moves || !moves->ops || moves->error)
 		return ;
 	i = 0;
 	while (i < moves->size)
 	{
-		current = op[moves->ops[i]];
-		while (*current)
-		{
-			write(1, current, 1);
-			current++;
-		}
-		write(1, "\n", 1);
+		if (moves->ops[i] >= OP_RRA)
+			write(1, op[moves->ops[i]], 4);
+		else
+			write(1, op[moves->ops[i]], 3);
 		i++;
 	}
 }
@@ -107,44 +100,3 @@ void	free_moves(t_moves *moves)
 	moves->capacity = 0;
 	moves->error = 0;
 }
-
-/* int	main(void)
-{
-	t_moves	moves;
-	int		i;
-
-	if (init_moves(&moves))
-		return (1);
-	printf("Initial size: %d\n", moves.size);
-	printf("Initial capacity: %d\n", moves.capacity);
-	i = 0;
-	while (i < 10000)
-	{
-		if (add_move(&moves, (t_op)(i % 11)))
-		{
-			free_moves(&moves);
-			return (1);
-		}
-		i++;
-	}
-	printf("Final size: %d\n", moves.size);
-	printf("Final capacity: %d\n", moves.capacity);
-	i = 0;
-	while (i < moves.size)
-	{
-		if (moves.ops[i] != (t_op)(i % 11))
-		{
-			printf("KO at index %d\n", i);
-			free_moves(&moves);
-			return (1);
-		}
-		i++;
-	}
-	printf("All operations preserved: OK\n");
-	free_moves(&moves);
-	if (!moves.ops && moves.size == 0 && moves.capacity == 0)
-		printf("Free moves: OK\n");
-	else
-		return (1);
-	return (0);
-} */

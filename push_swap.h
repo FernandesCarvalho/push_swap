@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/27 15:09:57 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 15:50:14 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,34 @@ typedef enum e_op // Estrategia para optimizar os movimentos e reduzir operacoes
 	OP_RRR
 }	t_op;
 
+typedef struct s_block
+{
+	int	read;
+	int	write;
+	int	rot_a;
+	int	rot_b;
+	int	size_a;
+	int	size_b;
+}	t_block;
+
 typedef struct s_moves 
 {
 	t_op	*ops;
 	int		size;
 	int		capacity;
 	int		error;
-} t_moves;
+}	t_moves;
 
 typedef struct s_merge
 {
 	t_moves	a;
 	t_moves	b;
 	t_moves	result;
+	int		read;
+	int		write;
+	int		start;
+	int		size_a;
+	int		size_b;
 }	t_merge;
 
 typedef struct s_node
@@ -201,5 +216,11 @@ void	optimize_pairs(t_moves *moves);
 void	optimize_blocks(t_moves *moves, int size_a, int size_b);
 void	optimize_moves(t_moves *moves, int initial_size);
 void	optimize_merge(t_moves *moves, int initial_size);
+void	normalize_block(t_block *block);
+void	flush_rotations(t_moves *moves, t_block *block);
+void	split_operation(t_op op, t_moves *a, t_moves *b);
+void	merge_operations(t_moves *a, t_moves *b, t_moves *result);
+void	process_block(t_merge *merge);
+void	write_block(t_moves *moves, t_merge *merge);
 
 #endif
