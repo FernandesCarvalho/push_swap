@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:00:13 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/22 17:36:52 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 18:53:12 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	pa(t_stack *a, t_stack *b)
 	if (!a || !b || !b->head)
 		return ;
 	push(a, b);
-	write(1, "pa\n", 3);
+	add_move(a->moves, OP_PA);
 }
 
 void	pb(t_stack *a, t_stack *b)
@@ -53,5 +53,5 @@ void	pb(t_stack *a, t_stack *b)
 	if (!a || !b || !a->head)
 		return ;
 	push(b, a);
-	write(1, "pb\n", 3);
+	add_move(b->moves, OP_PB);
 }

@@ -1,20 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   moves.c                                            :+:      :+:    :+:   */
+/*   optimize_moves.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/26 14:03:10 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/26 17:56:06 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 03:19:43 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-int	init_moves(t_moves *moves);
-int	add_move(t_moves *moves, t_op op);
-int	grow_moves(t_moves *moves);
+int		init_moves(t_moves *moves);
+int		add_move(t_moves *moves, t_op op);
+int		grow_moves(t_moves *moves);
+void	print_moves(t_moves *moves);
 void	free_moves(t_moves *moves);
 
 int	init_moves(t_moves *moves)
@@ -23,6 +24,7 @@ int	init_moves(t_moves *moves)
 		return (1);
 	moves->size = 0;
 	moves->capacity = 0;
+	moves->error = 0;
 	moves->ops = malloc(sizeof(t_op) * 128);
 	if (!moves->ops)
 		return (1);
@@ -32,12 +34,15 @@ int	init_moves(t_moves *moves)
 
 int	add_move(t_moves *moves, t_op op)
 {
-	if (!moves || !moves->ops)
+	if (!moves || !moves->ops || moves->error)
 		return (1);
 	if (moves->size >= moves->capacity)
 	{
 		if (grow_moves(moves))
+		{
+			moves->error = 1;
 			return (1);
+		}
 	}
 	moves->ops[moves->size] = op;
 	moves->size++;
@@ -70,6 +75,28 @@ int	grow_moves(t_moves *moves)
 	return (0);
 }
 
+void	print_moves(t_moves *moves)
+{
+	int		i;
+	char	*current;
+	char	*op[] = {"sa", "sb", "ss", "pa", "pb", "ra", "rb", "rr", "rra", "rrb", "rrr"};
+
+	if (!moves || !moves->ops || moves->error)
+		return ;
+	i = 0;
+	while (i < moves->size)
+	{
+		current = op[moves->ops[i]];
+		while (*current)
+		{
+			write(1, current, 1);
+			current++;
+		}
+		write(1, "\n", 1);
+		i++;
+	}
+}
+
 void	free_moves(t_moves *moves)
 {
 	if (!moves)
@@ -78,6 +105,7 @@ void	free_moves(t_moves *moves)
 	moves->ops = NULL;
 	moves->size = 0;
 	moves->capacity = 0;
+	moves->error = 0;
 }
 
 /* int	main(void)

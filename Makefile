@@ -6,7 +6,7 @@
 #    By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/21 17:33:56 by jeanbarr          #+#    #+#              #
-#    Updated: 2026/11/26 17:55:50 by fercarva         ###   ########.fr        #
+#    Updated: 2026/11/27 12:15:55 by fercarva         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,9 +41,12 @@ SRCS	= main_jeanlezy.c \
 			sorting/sort_simple.c \
 			sorting/sort_small.c \
 			sorting/sort_utils.c \
-			optimize/moves.c
+			optimize/optimize_moves.c \
+			optimize/optimize_pairs.c \
+			optimize/optimize_blocks.c \
+			optimize/optimize_final.c \
+			optimize/optimize_merge.c
 			
-	
 OBJS	= $(SRCS:.c=.o)
 
 all: $(NAME)

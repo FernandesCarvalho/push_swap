@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/22 20:46:02 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/26 17:59:34 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 10:44:18 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,13 @@ int	main(int argc, char **argv)
 	b.moves = &moves;
 	if (!is_sorted(&a))
 		dispatch_sort(&a, &b, &config);
-		
+	if (moves.error)
+	{
+		free_moves(&moves);
+		return (error_exit(&a, &b, NULL));
+	}
+	optimize_moves(&moves, a.size);
+	print_moves(&moves);
 	if (is_sorted(&a) && b.size == 0)
 		write(2, "OK\n", 3);
 	else

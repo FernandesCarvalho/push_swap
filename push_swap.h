@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/26 18:00:24 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 15:09:57 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,15 @@ typedef struct s_moves
 	t_op	*ops;
 	int		size;
 	int		capacity;
+	int		error;
 } t_moves;
+
+typedef struct s_merge
+{
+	t_moves	a;
+	t_moves	b;
+	t_moves	result;
+}	t_merge;
 
 typedef struct s_node
 {
@@ -182,11 +190,16 @@ void	sort_five(t_stack *a, t_stack *b);
 
 //========================================================================================================
 
-//                             ****     SORTING     ****
+//                             ****     OPTIMIZE     ****
 
 int		init_moves(t_moves *moves);
 int		add_move(t_moves *moves, t_op op);
 int		grow_moves(t_moves *moves);
+void	print_moves(t_moves *moves);
 void	free_moves(t_moves *moves);
+void	optimize_pairs(t_moves *moves);
+void	optimize_blocks(t_moves *moves, int size_a, int size_b);
+void	optimize_moves(t_moves *moves, int initial_size);
+void	optimize_merge(t_moves *moves, int initial_size);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   swap.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:32:06 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/24 11:02:15 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 18:48:26 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	sa(t_stack *a)
 	if (!a || a->size < 2)
 		return ;
 	swap(a);
-	write(1, "sa\n", 3);
+	add_move(a->moves, OP_SA);
 }
 
 void	sb(t_stack *b)
@@ -47,7 +47,7 @@ void	sb(t_stack *b)
 	if (!b || b->size < 2)
 		return ;
 	swap(b);
-	write(1, "sb\n", 3);
+	add_move(b->moves, OP_SB);
 }
 
 void	ss(t_stack *a, t_stack *b)
@@ -66,5 +66,10 @@ void	ss(t_stack *a, t_stack *b)
 		did_swap = 1;
 	}
 	if (did_swap)
-		write(1, "ss\n", 3);
+	{
+		if (a)
+			add_move(a->moves, OP_SS);
+		else
+			add_move(b->moves, OP_SS);
+	}
 }

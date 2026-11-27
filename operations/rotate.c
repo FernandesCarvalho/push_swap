@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rotate.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 18:20:58 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/24 11:01:36 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/26 18:49:17 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ra(t_stack *a)
 	if (!a || a->size < 2)
 		return ;
 	rotate(a);
-	write(1, "ra\n", 3);
+	add_move(a->moves, OP_RA);
 }
 
 void	rb(t_stack *b)
@@ -40,7 +40,7 @@ void	rb(t_stack *b)
 	if (!b || b->size < 2)
 		return ;
 	rotate(b);
-	write(1, "rb\n", 3);
+	add_move(b->moves, OP_RB);
 }
 
 void	rr(t_stack *a, t_stack *b)
@@ -59,5 +59,10 @@ void	rr(t_stack *a, t_stack *b)
 		did_rotate = 1;
 	}
 	if (did_rotate)
-		write(1, "rr\n", 3);
+	{
+		if (a)
+			add_move(a->moves, OP_RR);
+		else
+			add_move(b->moves, OP_RR);
+	}
 }
