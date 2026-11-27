@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/25 13:15:17 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/27 16:26:12 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 17:13:51 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	put_nbr_err(long n)
 	c = (char)((n % 10) + '0');
 	write(2, &c, 1);
 }
+
 void	count_moves(t_moves *moves)
 {
 	t_ops	*stats;

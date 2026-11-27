@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 15:09:50 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/25 13:37:16 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 17:15:07 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 static int	rotation_to_a(t_stack *a, t_stack *b, int size, int pivot);
 static int	rotation_to_b(t_stack *a, t_stack *b, int size, int pivot);
-int	partition_b(t_stack *a, t_stack *b, int size, int pivot);
-int	partition_a(t_stack *a, t_stack *b, int size, int pivot);
-int	get_pivot(t_stack *stack, int size);
 
 int	get_pivot(t_stack *stack, int size)
 {
@@ -25,7 +22,7 @@ int	get_pivot(t_stack *stack, int size)
 	int		i;
 
 	if (!stack || size <= 0 || size > stack->size)
-		return (0); 
+		return (0);
 	i = size;
 	current = stack->head;
 	min_index = current->index;
@@ -115,7 +112,6 @@ int	partition_b(t_stack *a, t_stack *b, int size, int pivot)
 	full_stack = (size == b->size);
 	quant = size - size / 2;
 	rotation = rotation_to_b(a, b, size, pivot);
-
 	if (!full_stack)
 	{
 		while (rotation-- > 0)

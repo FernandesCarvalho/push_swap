@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/22 20:46:02 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/27 16:28:58 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 17:22:03 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,54 +49,50 @@ static void	dispatch_sort(t_stack *a, t_stack *b, t_strategy used_strat)
 		sort_complex(a, b);
 }
 
-static t_strategy	resolve_strategy(t_config *config, double disorder)
+static int	run_sort(t_program *prog)
 {
-	if (config->strategy == STRAT_ADAPTIVE)
-		return (choose_adaptive(disorder));
-	return (config->strategy);
+	prog->initial_size = prog->a.size;
+	prog->disorder = compute_disorder(&prog->a);
+	prog->used_strat = prog->config.strategy;
+	if (prog->used_strat == STRAT_ADAPTIVE)
+		prog->used_strat = choose_adaptive(prog->disorder);
+	if (init_moves(&prog->moves))
+		return (error_exit(&prog->a, &prog->b, NULL));
+	prog->a.moves = &prog->moves;
+	prog->b.moves = &prog->moves;
+	if (!is_sorted(&prog->a))
+		dispatch_sort(&prog->a, &prog->b, prog->used_strat);
+	if (prog->moves.error)
+	{
+		free_moves(&prog->moves);
+		return (error_exit(&prog->a, &prog->b, NULL));
+	}
+	optimize_moves(&prog->moves, prog->initial_size);
+	if (prog->config.bench)
+		count_moves(&prog->moves);
+	print_moves(&prog->moves);
+	print_bench(&prog->config, prog->used_strat, prog->disorder);
+	free_moves(&prog->moves);
+	return (0);
 }
 
 int	main(int argc, char **argv)
 {
-	t_stack		a;
-	t_stack		b;
-	t_config	config;
-	t_strategy	used_strat;
-	double		disorder;
-	t_moves		moves;
-	int			initial_size;
+	t_program	prog;
 
 	if (argc == 1)
 		return (0);
-	parse_flags(argc, argv, &config);
-	if (config.arg_start >= argc)
+	parse_flags(argc, argv, &prog.config);
+	if (prog.config.arg_start >= argc)
 		return (0);
-	init_stack(&a);
-	init_stack(&b);
-	if (parse_args(argc - config.arg_start,
-			argv + config.arg_start, &a, &b))
+	init_stack(&prog.a);
+	init_stack(&prog.b);
+	if (parse_args(argc - prog.config.arg_start,
+			argv + prog.config.arg_start, &prog.a, &prog.b))
 		return (1);
-	initial_size = a.size;
-	disorder = compute_disorder(&a);
-	used_strat = resolve_strategy(&config, disorder);
-	if (init_moves(&moves))
-		return (error_exit(&a, &b, NULL));
-	a.moves = &moves;
-	b.moves = &moves;
-	if (!is_sorted(&a))
-		dispatch_sort(&a, &b, used_strat);
-	if (moves.error)
-	{
-		free_moves(&moves);
-		return (error_exit(&a, &b, NULL));
-	}
-	optimize_moves(&moves, initial_size);
-	if (config.bench)
-		count_moves(&moves);
-	print_moves(&moves);
-	print_bench(&config, used_strat, disorder);
-	free_moves(&moves);
-	free_stack(&a);
-	free_stack(&b);
+	if (run_sort(&prog))
+		return (1);
+	free_stack(&prog.a);
+	free_stack(&prog.b);
 	return (0);
 }

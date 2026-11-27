@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/27 16:27:28 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 17:20:56 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,17 @@ typedef struct s_config
 	int			bench;
 	int			arg_start;
 }	t_config;
+
+typedef struct s_program
+{
+	t_stack		a;
+	t_stack		b;
+	t_config	config;
+	t_strategy	used_strat;
+	double		disorder;
+	t_moves		moves;
+	int			initial_size;
+}	t_program;
 
 typedef struct s_ops //
 {

@@ -6,7 +6,7 @@
 /*   By: fercarva <fercarva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 17:57:31 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/25 13:03:53 by fercarva         ###   ########.fr       */
+/*   Updated: 2026/11/27 17:24:11 by fercarva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,21 @@ static void	sort_a(t_stack *a, t_stack *b, int size)
 	sort_b(a, b, pushed);
 }
 
+static void	sort_small_b(t_stack *a, t_stack *b, int size)
+{
+	if (size == 1)
+		pa(a, b);
+	else if (size == 2)
+	{
+		if (b->head->index < b->head->next->index)
+			sb(b);
+		pa(a, b);
+		pa(a, b);
+	}
+	else if (size == 3)
+		sort_three_group_b(a, b);
+}
+
 static void	sort_b(t_stack *a, t_stack *b, int size)
 {
 	int	pivot;
@@ -57,22 +72,9 @@ static void	sort_b(t_stack *a, t_stack *b, int size)
 
 	if (!a || !b || size <= 0 || size > b->size)
 		return ;
-	if (size == 1)
+	if (size <= 3)
 	{
-		pa(a, b);
-		return ;
-	}
-	if (size == 2)
-	{
-		if (b->head->index < b->head->next->index)
-			sb(b);
-		pa(a, b);
-		pa(a, b);
-		return ;
-	}
-	if (size == 3)
-	{
-		sort_three_group_b(a, b);
+		sort_small_b(a, b, size);
 		return ;
 	}
 	pivot = get_pivot(b, size);
