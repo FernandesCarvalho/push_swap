@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/18 17:37:33 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/26 14:58:17 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/27 11:41:30 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ double		compute_disorder(t_stack *a);
 t_strategy	choose_adaptive(double disorder);
 
 t_ops		*get_ops_stats(void);
+void		put_str_err(const char *s);
 void		print_bench(t_config *cfg, t_strategy used_strat, double disorder);
 void		put_nbr_err(long n);
 void		record_op(int *op_count);
@@ -159,9 +160,7 @@ void		sort_simple(t_stack *a, t_stack *b);
 
 //                  #MEDIUM
 void		sort_medium(t_stack *a, t_stack *b);//
-void		push_chunk_node(t_stack *a, t_stack *b, int *pshed, t_chunk *chnk);
 void		push_chunks_to_b(t_stack *a, t_stack *b);//
-void		push_back_to_a(t_stack *a, t_stack *b);//
 
 //                  #COMPLEX
 

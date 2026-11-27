@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 11:57:20 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/26 13:59:51 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/27 11:04:13 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	get_range(int total)
 	return (range);
 }
 
-void	push_chunk_node(t_stack *a, t_stack *b, int *pshed, t_chunk *chnk)
+static void	push_chunk_node(t_stack *a, t_stack *b, int *pshed, t_chunk *chnk)
 {
 	int	index;
 

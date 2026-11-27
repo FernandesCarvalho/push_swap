@@ -6,7 +6,7 @@
 #    By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/11/21 17:33:56 by jeanbarr          #+#    #+#              #
-#    Updated: 2026/11/26 12:32:33 by jeanbarr         ###   ########.fr        #
+#    Updated: 2026/11/27 11:00:28 by jeanbarr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,10 +33,8 @@ SRCS	= main.c \
 			operations/rotate.c \
 			operations/reverse_rotate.c \
 			operations/swap.c \
-			sorting/choose_adaptive.c \
-			sorting/compute_disorder.c \
+			sorting/choose_disorder.c \
 			sorting/chunk_utils.c \
-			sorting/indexing.c \
 			sorting/sort_complex_utils.c \
 			sorting/sort_complex.c \
 			sorting/sort_medium.c \

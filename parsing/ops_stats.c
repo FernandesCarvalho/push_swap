@@ -6,11 +6,18 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/25 13:15:17 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/25 13:53:01 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/27 11:40:59 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
+
+void	put_str_err(const char *s)
+{
+	if (!s)
+		return ;
+	write(2, s, ft_strlen(s));
+}
 
 t_ops	*get_ops_stats(void)
 {

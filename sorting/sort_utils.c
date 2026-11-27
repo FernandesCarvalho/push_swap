@@ -6,11 +6,35 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/22 20:35:37 by jeanbarr          #+#    #+#             */
-/*   Updated: 2026/11/26 14:59:23 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/27 10:57:52 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
+
+void	assign_index(t_stack *a)
+{
+	int		index;
+	t_node	*check;
+	t_node	*current;
+
+	if (!a || a->size < 1)
+		return ;
+	current = a->head;
+	while (current)
+	{
+		check = a->head;
+		index = 0;
+		while (check)
+		{
+			if (current->value > check->value)
+				index++;
+			check = check->next;
+		}
+		current->index = index;
+		current = current->next;
+	}
+}
 
 int	is_sorted(t_stack *stack)
 {

@@ -6,7 +6,7 @@
 /*   By: jeanbarr <jeanbarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 00:50:44 by fercarva          #+#    #+#             */
-/*   Updated: 2026/11/26 14:41:05 by jeanbarr         ###   ########.fr       */
+/*   Updated: 2026/11/27 11:01:55 by jeanbarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	idx_dist(t_stack *b, int idx)
 	return (b->size - pos);
 }
 
-void	push_back_to_a(t_stack *a, t_stack *b)
+static void	push_back_to_a(t_stack *a, t_stack *b)
 {
 	int	max;
 
