@@ -78,6 +78,34 @@ typedef struct s_stack
 	t_moves	*moves;
 }	t_stack;
 
+/* ALTERADO: novas estruturas para o novo quicksort do complex.            */
+/* MOTIVO: o algoritmo antigo so sabia "grupo no topo de A" ou "grupo no   */
+/* topo de B" e tinha de rebobinar rotacoes. O novo guarda tambem grupos   */
+/* no fundo das pilhas, o que elimina esse rebobinar.                      */
+/* t_loc   = onde esta um grupo (topo/fundo de A, topo/fundo de B).        */
+/* t_part  = um grupo de numeros: posicao (loc) + quantidade (size).       */
+/* t_split = as 3 partes que saem de dividir um grupo: min, mid e max.     */
+typedef enum e_loc
+{
+	TOP_A,
+	BOTTOM_A,
+	TOP_B,
+	BOTTOM_B
+}	t_loc;
+
+typedef struct s_part
+{
+	t_loc	loc;
+	int		size;
+}	t_part;
+
+typedef struct s_split
+{
+	t_part	min;
+	t_part	mid;
+	t_part	max;
+}	t_split;
+
 typedef struct s_chunk
 {
 	int	start;
@@ -222,10 +250,17 @@ void		push_chunks_to_b(t_stack *a, t_stack *b);//
 
 //                  #COMPLEX
 
-int			get_pivot(t_stack *stack, int size);
-int			partition_a(t_stack *a, t_stack *b, int size, int pivot);
-int			partition_b(t_stack *a, t_stack *b, int size, int pivot);
+/* ALTERADO: removidos get_pivot, partition_a e partition_b.               */
+/* MOTIVO: faziam o quicksort de 2 metades, que gastava ~20% das ops a     */
+/* rebobinar com rra/rrb. Substituidos pelas funcoes abaixo (quicksort de  */
+/* 3 particoes): part_head, part_min, move_part e fix_part_loc ficam em    */
+/* sort_complex_move.c (ficheiro novo); split_part em sort_complex_utils.c.*/
 void		sort_complex(t_stack *a, t_stack *b);
+t_node		*part_head(t_stack *a, t_stack *b, t_loc loc);
+int			part_min(t_stack *a, t_stack *b, t_part *part);
+void		move_part(t_stack *a, t_stack *b, t_loc from, t_loc to);
+void		fix_part_loc(t_stack *a, t_stack *b, t_part *part);
+void		split_part(t_stack *a, t_stack *b, t_part *part, t_split *split);
 int			is_group_sorted(t_stack *stack, int size);
 void		sort_three_group(t_stack *a);
 void		sort_three_group_b(t_stack *a, t_stack *b);

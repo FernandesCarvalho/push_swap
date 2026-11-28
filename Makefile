@@ -41,6 +41,7 @@ SRCS	= main.c \
 			sorting/sort_simple.c \
 			sorting/sort_small.c \
 			sorting/sort_utils.c \
+			sorting/sort_complex_move.c \
 			sorting/sort_complex_group.c \
 			optimize/optimize_blocks.c \
 			optimize/optimize_final.c \
